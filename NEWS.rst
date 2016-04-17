@@ -1,13 +1,29 @@
 Release History
 ---------------
 
+0.5.2 (not yet released)
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* development migrated from BitBucket to GitHub
+
+* ``redirect_stream``, ``redirect_stdout``, ``redirect_stderr`` and ``suppress``
+  now explicitly inherit from ``object``, ensuring compatibility with
+  ``ExitStack`` when run under Python 2.x (patch contributed by Devin
+  Jeanpierre).
+
+* ``MANIFEST.in`` is now included in the published sdist, ensuring the archive
+  can be precisely recreated even without access to the original source repo
+  (patch contributed by Guy Rozendorn)
+
+
 0.5.1 (2016-01-13)
 ^^^^^^^^^^^^^^^^^^
 
 * Python 2.6 compatilibity restored (although 2.6 is still missing from the
-  current CI configuration)
+  current CI configuration) (patch contributed by Armin Ronacher)
 
 * README converted back to reStructured Text formatting
+
 
 0.5.0 (2016-01-12)
 ^^^^^^^^^^^^^^^^^^
@@ -21,12 +37,16 @@ Release History
 
 * Python 2.6, 3.2 and 3.3 have been dropped from compatibility testing
 
+* tox is now supported for local version compatibility testing (patch by
+  Marc Abramowitz)
+
 
 0.4.0 (2012-05-05)
 ^^^^^^^^^^^^^^^^^^
 
 * Issue #8: Replace ContextStack with ExitStack (old ContextStack API
   retained for backwards compatibility)
+
 * Fall back to unittest2 if unittest is missing required functionality
 
 
@@ -34,6 +54,7 @@ Release History
 ^^^^^^^^^^^^^^^^^^
 
 * Issue #7: Add MANIFEST.in so PyPI package contains all relevant files
+  (patch contributed by Doug Latornell)
 
 
 0.3 (2012-01-04)
