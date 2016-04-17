@@ -2,7 +2,13 @@
     :target: https://contextlib2.readthedocs.org/
     :alt: Latest Docs
 
-.. todo: set up Travis CI
+.. image:: https://img.shields.io/travis/ncoghlan/contextlib2/master.svg
+   :target: http://travis-ci.org/ncoghlan/contextlib2
+
+.. image:: https://landscape.io/github/ncoghlan/contextlib2/master/landscape.svg
+   :target: https://landscape.io/github/ncoghlan/contextlib2/
+
+
 .. todo: set up Coveralls
 
 contextlib2 is a backport of the `standard library's contextlib
@@ -19,20 +25,26 @@ contextlib2 currently has no dependencies.
 
 Local testing is currently just a matter of running ``python test_contextlib2.py``.
 
-You can test against multiple versions of Python with `tox <http://tox.testrun.org/>`_::
+You can test against multiple versions of Python with
+`tox <https://tox.testrun.org/>`_::
 
     pip install tox
     tox
 
-Versions currently tested in tox are:
+Versions currently tested in both tox and Travis CI are:
 
+* CPython 2.6
 * CPython 2.7
 * CPython 3.4
 * CPython 3.5
+* CPython 3.6 (CPython development branch)
 * PyPy
-* PyPy3
 
-To install all the relevant runtimes on Fedora 23::
+tox also has a PyPy3 configuration, but it is not configured in Travis
+due to a
+`known incompatibility <https://bitbucket.org/pypy/pypy/issues/1903>`_.
+
+To install several of the relevant runtimes on Fedora 23::
 
     sudo dnf install python python3 pypy pypy3
     sudo dnf copr enable -y mstuchli/Python3.5
