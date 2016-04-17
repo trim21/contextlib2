@@ -17,6 +17,6 @@ matrix:
         - python: pypy
           env: TOXENV=pypy
 
-install: tox --notest
+install: pip install tox && tox --notest
 
 script: tox
