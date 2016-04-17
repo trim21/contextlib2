@@ -16,3 +16,7 @@ matrix:
           env: TOXENV=py36
         - python: pypy
           env: TOXENV=pypy
+
+install: tox --notest
+
+script: tox
