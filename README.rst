@@ -2,11 +2,8 @@
     :target: https://contextlib2.readthedocs.org/
     :alt: Latest Docs
 
-.. image:: https://codeship.com/projects/884e9500-3d1a-0133-3eb0-1abe7f570a4c/status?branch=default
-    :target: https://codeship.com/projects/102388
-
-.. image:: https://codecov.io/bitbucket/ncoghlan/contextlib2/coverage.svg?branch=default
-    :target: https://codecov.io/bitbucket/ncoghlan/contextlib2?branch=default
+.. todo: set up Travis CI
+.. todo: set up Coveralls
 
 contextlib2 is a backport of the `standard library's contextlib
 module <https://docs.python.org/3.5/library/contextlib.html>`_ to
@@ -29,8 +26,8 @@ You can test against multiple versions of Python with `tox <http://tox.testrun.o
 
 Versions currently tested in tox are:
 
-* CPython 2.7 (also tested in Codeship)
-* CPython 3.4 (also tested in Codeship)
+* CPython 2.7
+* CPython 3.4
 * CPython 3.5
 * PyPy
 * PyPy3

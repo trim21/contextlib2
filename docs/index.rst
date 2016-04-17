@@ -693,11 +693,11 @@ Supported Python versions are currently 2.7 and 3.2+.
 Development and Support
 -----------------------
 
-contextlib2 is developed and maintained on BitBucket_. Problems and suggested
+contextlib2 is developed and maintained on GitHub_. Problems and suggested
 improvements can be posted to the `issue tracker`_.
 
-.. _BitBucket: https://bitbucket.org/ncoghlan/contextlib2/overview
-.. _issue tracker: https://bitbucket.org/ncoghlan/contextlib2/issues?status=new&status=open
+.. _GitHub: https://github.com/ncoghlan/contextlib2
+.. _issue tracker: https://github.com/ncoghlan/contextlib2/issues
 
 
 .. include:: ../NEWS.rst
