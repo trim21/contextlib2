@@ -5,11 +5,11 @@
 .. image:: https://img.shields.io/travis/ncoghlan/contextlib2/master.svg
    :target: http://travis-ci.org/ncoghlan/contextlib2
 
+.. image:: https://coveralls.io/repos/github/ncoghlan/contextlib2/badge.svg?branch=master
+   :target: https://coveralls.io/github/ncoghlan/contextlib2?branch=master
+
 .. image:: https://landscape.io/github/ncoghlan/contextlib2/master/landscape.svg
    :target: https://landscape.io/github/ncoghlan/contextlib2/
-
-
-.. todo: set up Coveralls
 
 contextlib2 is a backport of the `standard library's contextlib
 module <https://docs.python.org/3.5/library/contextlib.html>`_ to
