@@ -5,6 +5,7 @@ pip.egg-info/
 MANIFEST
 .tox
 *.egg
+*.egg-info
 *.py[cod]
 *~
 .coverage
