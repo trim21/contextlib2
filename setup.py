@@ -1,9 +1,5 @@
 #!/usr/bin/env python
-from distutils.core import setup
-
-# Technically, unittest2 is a dependency to run the tests on 2.7
-# This file ignores that, since I don't want to depend on
-# setuptools just to get "tests_require" support
+from setuptools import setup
 
 setup(
     name='contextlib2',
@@ -20,8 +16,10 @@ setup(
         'License :: OSI Approved :: Python Software Foundation License',
         # These are the Python versions tested, it may work on others
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
