@@ -310,6 +310,10 @@ Functions and classes provided:
    foundation for higher level context managers that manipulate the exit
    stack in application specific ways.
 
+   Context managers used with :class:`ExitStack` must be new-style classes -
+   this is the default on Python 3, but requires explicitly inheriting from
+   :class:`object` or another new-style class in Python 2.
+
    .. versionadded:: 0.4
       Part of the standard library in Python 3.3 and later
 
