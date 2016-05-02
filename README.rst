@@ -21,9 +21,10 @@ enhancements to the standard library version.
 Development
 -----------
 
-contextlib2 currently has no dependencies.
+contextlib2 has no runtime dependencies, but requires ``unittest2`` for testing
+on Python 2.x.
 
-Local testing is currently just a matter of running ``python test_contextlib2.py``.
+Local testing is just a matter of running ``python test_contextlib2.py``.
 
 You can test against multiple versions of Python with
 `tox <https://tox.testrun.org/>`_::
