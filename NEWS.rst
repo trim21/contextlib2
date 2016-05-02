@@ -1,8 +1,8 @@
 Release History
 ---------------
 
-0.5.2 (not yet released)
-^^^^^^^^^^^^^^^^^^^^^^^^
+0.5.2 (2016-05-02)
+^^^^^^^^^^^^^^^^^^
 
 * development migrated from BitBucket to GitHub
 
