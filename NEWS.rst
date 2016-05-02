@@ -1,12 +1,15 @@
 Release History
 ---------------
 
-0.5.3 (not yet released)
-^^^^^^^^^^^^^^^^^^^^^^^^
+0.5.3 (2016-05-02)
+^^^^^^^^^^^^^^^^^^
 
 * ``ExitStack`` now correctly handles context managers implemented as old-style
   classes in Python 2.x (such as ``codecs.StreamReader`` and
   ``codecs.StreamWriter``)
+
+* ``setup.py`` has been migrated to setuptools and configured to emit a
+  universal wheel file by default
 
 0.5.2 (2016-05-02)
 ^^^^^^^^^^^^^^^^^^
@@ -26,8 +29,7 @@ Release History
 0.5.1 (2016-01-13)
 ^^^^^^^^^^^^^^^^^^
 
-* Python 2.6 compatilibity restored (although 2.6 is still missing from the
-  current CI configuration) (patch contributed by Armin Ronacher)
+* Python 2.6 compatilibity restored (patch contributed by Armin Ronacher)
 
 * README converted back to reStructured Text formatting
 
