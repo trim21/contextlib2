@@ -4,7 +4,9 @@ Release History
 0.5.3 (not yet released)
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* TBD
+* ``ExitStack`` now correctly handles context managers implemented as old-style
+  classes in Python 2.x (such as ``codecs.StreamReader`` and
+  ``codecs.StreamWriter``)
 
 0.5.2 (2016-05-02)
 ^^^^^^^^^^^^^^^^^^

@@ -706,6 +706,39 @@ class TestExitStack(unittest.TestCase):
         stack.push(cm)
         self.assertIs(stack._exit_callbacks[-1], cm)
 
+    def test_default_class_semantics(self):
+        # For Python 2.x, this ensures compatibility with old-style classes
+        # For Python 3.x, it just reruns some of the other tests
+        class DefaultCM:
+            def __enter__(self):
+                result.append("Enter")
+            def __exit__(self, *exc_details):
+                result.append("Exit")
+        class DefaultCallable:
+            def __call__(self, *exc_details):
+                result.append("Callback")
+
+        result = []
+        cm = DefaultCM()
+        cb = DefaultCallable()
+        with ExitStack() as stack:
+            stack.enter_context(cm)
+            self.assertIs(stack._exit_callbacks[-1].__self__, cm)
+            stack.push(cb)
+            stack.push(cm)
+            self.assertIs(stack._exit_callbacks[-1].__self__, cm)
+            result.append("Running")
+            stack.callback(cb)
+            self.assertIs(stack._exit_callbacks[-1].__wrapped__, cb)
+        self.assertEqual(result, ["Enter", "Running",
+                                  "Callback", "Exit",
+                                  "Callback", "Exit",
+                                 ])
+
+        with ExitStack():
+            pass
+
+
 
 class TestRedirectStream:
 
