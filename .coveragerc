@@ -1,0 +1,6 @@
+[run]
+source = contextlib2
+branch = 1
+
+[report]
+omit = *test*
