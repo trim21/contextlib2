@@ -1,3 +1,2 @@
-include *.py *.txt *.rst MANIFEST.in
+include *.py *.txt *.rst *.md MANIFEST.in
 recursive-include docs *.rst *.py make.bat Makefile
-
