@@ -696,8 +696,8 @@ Development and Support
 contextlib2 is developed and maintained on GitHub_. Problems and suggested
 improvements can be posted to the `issue tracker`_.
 
-.. _GitHub: https://github.com/ncoghlan/contextlib2
-.. _issue tracker: https://github.com/ncoghlan/contextlib2/issues
+.. _GitHub: https://github.com/jazzband/contextlib2
+.. _issue tracker: https://github.com/jazzband/contextlib2/issues
 
 
 .. include:: ../NEWS.rst
