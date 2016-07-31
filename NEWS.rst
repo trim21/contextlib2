@@ -1,6 +1,20 @@
 Release History
 ---------------
 
+0.5.4 (2016-07-31)
+^^^^^^^^^^^^^^^^^^
+
+* Thanks to the welcome efforts of Jannis Leidel, contextlib2 is now a
+  [Jazzband](https://jazzband.co/) project! This means that I (Nick Coghlan)
+  am no longer a single point of failure for backports of future contextlib
+  updates to earlier Python versions.
+
+* Issue `#7 <https://github.com/jazzband/contextlib2/issues/7>`__: Backported
+  fix for CPython issue `#27122 <http://bugs.python.org/issue27122>`__,
+  preventing a potential infinite loop on Python 3.5 when handling
+  ``RuntimeError`` (CPython updates by Gregory P. Smith & Serhiy Storchaka)
+
+
 0.5.3 (2016-05-02)
 ^^^^^^^^^^^^^^^^^^
 
@@ -53,8 +67,8 @@ Release History
 0.4.0 (2012-05-05)
 ^^^^^^^^^^^^^^^^^^
 
-* Issue #8: Replace ContextStack with ExitStack (old ContextStack API
-  retained for backwards compatibility)
+* (BitBucket) Issue #8: Replace ContextStack with ExitStack (old ContextStack
+  API retained for backwards compatibility)
 
 * Fall back to unittest2 if unittest is missing required functionality
 
@@ -62,20 +76,20 @@ Release History
 0.3.1 (2012-01-17)
 ^^^^^^^^^^^^^^^^^^
 
-* Issue #7: Add MANIFEST.in so PyPI package contains all relevant files
-  (patch contributed by Doug Latornell)
+* (BitBucket) Issue #7: Add MANIFEST.in so PyPI package contains all relevant
+  files (patch contributed by Doug Latornell)
 
 
 0.3 (2012-01-04)
 ^^^^^^^^^^^^^^^^
 
-* Issue #5: ContextStack.register no longer pointlessly returns the wrapped
-  function
-* Issue #2: Add examples and recipes section to docs
-* Issue #3: ContextStack.register_exit() now accepts objects with __exit__
-  attributes in addition to accepting exit callbacks directly
-* Issue #1: Add ContextStack.preserve() to move all registered callbacks to
-  a new ContextStack object
+* (BitBucket) Issue #5: ContextStack.register no longer pointlessly returns the
+  wrapped function
+* (BitBucket) Issue #2: Add examples and recipes section to docs
+* (BitBucket) Issue #3: ContextStack.register_exit() now accepts objects with
+  __exit__ attributes in addition to accepting exit callbacks directly
+* (BitBucket) Issue #1: Add ContextStack.preserve() to move all registered
+  callbacks to a new ContextStack object
 * Wrapped callbacks now expose __wrapped__ (for direct callbacks) or __self__
   (for context manager methods) attributes to aid in introspection
 * Moved version number to a VERSION.txt file (read by both docs and setup.py)
