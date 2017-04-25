@@ -26,7 +26,8 @@ Development
 -----------
 
 contextlib2 has no runtime dependencies, but requires ``unittest2`` for testing
-on Python 2.x.
+on Python 2.x, as well as ``setuptools`` and ``wheel`` to generate universal
+wheel archives.
 
 Local testing is just a matter of running ``python test_contextlib2.py``.
 
@@ -42,15 +43,14 @@ Versions currently tested in both tox and Travis CI are:
 * CPython 2.7
 * CPython 3.4
 * CPython 3.5
-* CPython 3.6 (CPython development branch)
+* CPython 3.6
+* CPython 3.7 (CPython development branch)
 * PyPy
 
-tox also has a PyPy3 configuration, but it is not configured in Travis
-due to a
-`known incompatibility <https://bitbucket.org/pypy/pypy/issues/1903>`_.
+Versions currently tested only in tox are:
 
-To install several of the relevant runtimes on Fedora 23::
+* PyPy3
 
-    sudo dnf install python python3 pypy pypy3
-    sudo dnf copr enable -y mstuchli/Python3.5
-    sudo dnf install python35-python3
+This is due to an exception chaining compatibility bug that was fixed in
+the PyPy3 5.5 alpha release, while the version on Travis CI (as of April 2017)
+is still the older PyPy3 2.4.0 release.
