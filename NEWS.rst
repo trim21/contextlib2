@@ -1,6 +1,17 @@
 Release History
 ---------------
 
+0.5.5 (2017-04-25)
+^^^^^^^^^^^^^^^^^^
+
+* Issue `#13 <https://github.com/jazzband/contextlib2/issues/13>`__:
+  ``setup.py`` now falls back to plain ``distutils`` if ``setuptools`` is not
+  available (patch by Allan Harwood)
+
+* Updates to the default compatibility testing matrix:
+  * Added: PyPy3, CPython 3.6 (maintenance), CPython 3.7 (development)
+  * Dropped: CPython 3.3
+
 0.5.4 (2016-07-31)
 ^^^^^^^^^^^^^^^^^^
 
