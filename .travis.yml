@@ -15,8 +15,10 @@ matrix:
     env: TOXENV=py37
   - python: pypy
     env: TOXENV=pypy
-  - python: pypy3
-    env: TOXENV=pypy3
+# Travis CI hasn't updated to PyPy3 2.5 yet, so still has the exception
+# chaining compatibility bug that breaks the contextlib2 tests
+#  - python: pypy3
+#    env: TOXENV=pypy3
 install: pip install tox coveralls && tox --notest
 script: tox
 after_success: coveralls
