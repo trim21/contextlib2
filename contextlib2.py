@@ -11,8 +11,9 @@ __all__ = ["contextmanager", "closing", "ContextDecorator", "ExitStack",
 # Backwards compatibility
 __all__ += ["ContextStack"]
 
+
 class ContextDecorator(object):
-    "A base class or mixin that enables context managers to work as decorators."
+    """A base class or mixin that enables context managers to work as decorators."""
 
     def refresh_cm(self):
         """Returns the context manager used to actually wrap the call to the
@@ -176,8 +177,10 @@ class closing(object):
     """
     def __init__(self, thing):
         self.thing = thing
+
     def __enter__(self):
         return self.thing
+
     def __exit__(self, *exc_info):
         self.thing.close()
 
@@ -289,7 +292,7 @@ else:
     # but use exec to avoid SyntaxError in Python 3
     def _reraise_with_existing_context(exc_details):
         exc_type, exc_value, exc_tb = exc_details
-        exec ("raise exc_type, exc_value, exc_tb")
+        exec("raise exc_type, exc_value, exc_tb")
 
 # Handle old-style classes if they exist
 try:
@@ -302,8 +305,9 @@ else:
     def _get_type(obj):
         obj_type = type(obj)
         if obj_type is InstanceType:
-            return obj.__class__ # Old-style class
-        return obj_type # New-style class
+            return obj.__class__  # Old-style class
+        return obj_type  # New-style class
+
 
 # Inspired by discussions on http://bugs.python.org/issue13585
 class ExitStack(object):
@@ -416,6 +420,7 @@ class ExitStack(object):
         if pending_raise:
             _reraise_with_existing_context(exc_details)
         return received_exc and suppressed_exc
+
 
 # Preserve backwards compatibility
 class ContextStack(ExitStack):
