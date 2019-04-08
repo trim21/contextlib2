@@ -39,7 +39,6 @@ You can test against multiple versions of Python with
 
 Versions currently tested in both tox and Travis CI are:
 
-* CPython 2.6
 * CPython 2.7
 * CPython 3.4
 * CPython 3.5

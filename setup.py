@@ -7,6 +7,7 @@ except ImportError:
 setup(
     name='contextlib2',
     version=open('VERSION.txt').read().strip(),
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
     py_modules=['contextlib2'],
     license='PSF License',
     description='Backports and enhancements for the contextlib module',
