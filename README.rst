@@ -39,18 +39,10 @@ You can test against multiple versions of Python with
 
 Versions currently tested in both tox and Travis CI are:
 
-* CPython 2.6
 * CPython 2.7
 * CPython 3.4
 * CPython 3.5
 * CPython 3.6
-* CPython 3.7 (CPython development branch)
+* CPython 3.7
 * PyPy
-
-Versions currently tested only in tox are:
-
 * PyPy3
-
-This is due to an exception chaining compatibility bug that was fixed in
-the PyPy3 5.5 alpha release, while the version on Travis CI (as of April 2017)
-is still the older PyPy3 2.4.0 release.
