@@ -15,6 +15,58 @@ if not hasattr(unittest.TestCase, "assertRaisesRegex"):
 requires_docstrings = unittest.skipIf(sys.flags.optimize >= 2,
                                       "Test requires docstrings")
 
+
+class TestAbstractContextManager(unittest.TestCase):
+
+    def test_enter(self):
+        class DefaultEnter(AbstractContextManager):
+            def __exit__(self, *args):
+                super().__exit__(*args)
+
+        manager = DefaultEnter()
+        self.assertIs(manager.__enter__(), manager)
+
+    def test_exit_is_abstract(self):
+        class MissingExit(AbstractContextManager):
+            pass
+
+        with self.assertRaises(TypeError):
+            MissingExit()
+
+    def test_structural_subclassing(self):
+        # New style classes used here
+        class ManagerFromScratch(object):
+            def __enter__(self):
+                return self
+            def __exit__(self, exc_type, exc_value, traceback):
+                return None
+
+        self.assertTrue(issubclass(ManagerFromScratch, AbstractContextManager))
+
+        class DefaultEnter(AbstractContextManager):
+            def __exit__(self, *args):
+                super().__exit__(*args)
+
+        self.assertTrue(issubclass(DefaultEnter, AbstractContextManager))
+
+    if sys.version_info[:2] <= (3, 0):
+        def test_structural_subclassing_classic(self):
+            # Old style classes used here
+            class ManagerFromScratch:
+                def __enter__(self):
+                    return self
+                def __exit__(self, exc_type, exc_value, traceback):
+                    return None
+
+            self.assertTrue(issubclass(ManagerFromScratch, AbstractContextManager))
+
+            class DefaultEnter(AbstractContextManager):
+                def __exit__(self, *args):
+                    super().__exit__(*args)
+
+            self.assertTrue(issubclass(DefaultEnter, AbstractContextManager))
+
+
 class ContextManagerTestCase(unittest.TestCase):
 
     def test_contextmanager_plain(self):

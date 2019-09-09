@@ -1,16 +1,73 @@
 """contextlib2 - backports and enhancements to the contextlib module"""
 
+import abc
 import sys
 import warnings
 from collections import deque
 from functools import wraps
 
 __all__ = ["contextmanager", "closing", "nullcontext",
+           "AbstractContextManager",
            "ContextDecorator", "ExitStack",
            "redirect_stdout", "redirect_stderr", "suppress"]
 
 # Backwards compatibility
 __all__ += ["ContextStack"]
+
+
+# Backport abc.ABC
+if sys.version_info[:2] >= (3, 4):
+    _abc_ABC = abc.ABC
+else:
+    _abc_ABC = abc.ABCMeta('ABC', (object,), {'__slots__': ()})
+
+
+# Backport classic class MRO
+def _classic_mro(C, result):
+    if C in result:
+        return
+    result.append(C)
+    for B in C.__bases__:
+        _classic_mro(B, result)
+    return result
+
+
+# Backport _collections_abc._check_methods
+def _check_methods(C, *methods):
+    try:
+        mro = C.__mro__
+    except AttributeError:
+        mro = tuple(_classic_mro(C, []))
+
+    for method in methods:
+        for B in mro:
+            if method in B.__dict__:
+                if B.__dict__[method] is None:
+                    return NotImplemented
+                break
+        else:
+            return NotImplemented
+    return True
+
+
+class AbstractContextManager(_abc_ABC):
+    """An abstract base class for context managers."""
+
+    def __enter__(self):
+        """Return `self` upon entering the runtime context."""
+        return self
+
+    @abc.abstractmethod
+    def __exit__(self, exc_type, exc_value, traceback):
+        """Raise any exception triggered within the runtime context."""
+        return None
+
+    @classmethod
+    def __subclasshook__(cls, C):
+        """Check whether subclass is considered a subclass of this ABC."""
+        if cls is AbstractContextManager:
+            return _check_methods(C, "__enter__", "__exit__")
+        return NotImplemented
 
 
 class ContextDecorator(object):
