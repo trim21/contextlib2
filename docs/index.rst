@@ -21,11 +21,13 @@ involving the ``with`` statement.
 Additions Relative to the Standard Library
 ------------------------------------------
 
-This module is primarily a backport of the Python 3.5 version of
-:mod:`contextlib` to earlier releases. However, it is also a proving ground
-for new features not yet part of the standard library.
+This module is primarily a backport of the Python 3.6 version of
+:mod:`contextlib` to earlier releases.  It includes `nullcontext` from
+Python 3.7, however it does not yet provide async context management
+support from Python 3.7.
 
-There are currently no such features in the module.
+However, it is also a proving ground for new features not yet part of the
+standard library.  There are currently no such features in the module.
 
 Refer to the :mod:`contextlib` documentation for details of which
 versions of Python 3 introduce the various APIs provided in this module.
@@ -35,6 +37,19 @@ API Reference
 =============
 
 Functions and classes provided:
+
+
+.. class:: AbstractContextManager
+
+   An :term:`abstract base class` for classes that implement
+   :meth:`object.__enter__` and :meth:`object.__exit__`. A default
+   implementation for :meth:`object.__enter__` is provided which returns
+   ``self`` while :meth:`object.__exit__` is an abstract method which by default
+   returns ``None``.
+
+   .. versionadded:: 0.6.0
+      Part of the standard library in Python 3.6 and later
+
 
 .. decorator:: contextmanager
 
@@ -108,6 +123,39 @@ Functions and classes provided:
 
    without needing to explicitly close ``page``.  Even if an error occurs,
    ``page.close()`` will be called when the :keyword:`with` block is exited.
+
+
+.. function:: nullcontext(enter_result=None)
+
+   Return a context manager that returns *enter_result* from ``__enter__``, but
+   otherwise does nothing. It is intended to be used as a stand-in for an
+   optional context manager, for example::
+
+      def myfunction(arg, ignore_exceptions=False):
+          if ignore_exceptions:
+              # Use suppress to ignore all exceptions.
+              cm = contextlib.suppress(Exception)
+          else:
+              # Do not ignore any exceptions, cm has no effect.
+              cm = contextlib.nullcontext()
+          with cm:
+              # Do something
+
+   An example using *enter_result*::
+
+      def process_file(file_or_path):
+          if isinstance(file_or_path, str):
+              # If string, open file
+              cm = open(file_or_path)
+          else:
+              # Caller is responsible for closing file
+              cm = nullcontext(file_or_path)
+
+          with cm as file:
+              # Perform processing on the file
+
+   .. versionadded:: 0.6.0
+      Part of the standard library in Python 3.7 and later
 
 
 .. function:: suppress(*exceptions)

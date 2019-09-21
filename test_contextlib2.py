@@ -963,6 +963,16 @@ class TestSuppress(unittest.TestCase):
             # This shouldn't raise an exception.
             stack.enter_context(suppress())
 
+
+class NullcontextTestCase(unittest.TestCase):
+    def test_nullcontext(self):
+        class C:
+            pass
+        c = C()
+        with nullcontext(c) as c_in:
+            self.assertIs(c_in, c)
+
+
 if __name__ == "__main__":
     import unittest
     unittest.main()

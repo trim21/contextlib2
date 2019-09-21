@@ -1,6 +1,13 @@
 Release History
 ---------------
 
+0.6.0 (Unreleased)
+^^^^^^^^^^^^^^^^^^
+
+* Issue `#16 <https://github.com/jazzband/contextlib2/issues/16>`__:
+  Backport `AbstractContextManager` from Python 3.6 and `nullcontext`
+  from Python 3.7 (patch by John Vandenberg)
+
 0.5.5 (2017-04-25)
 ^^^^^^^^^^^^^^^^^^
 
