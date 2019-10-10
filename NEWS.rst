@@ -1,7 +1,13 @@
 Release History
 ---------------
 
-0.6.0 (Unreleased)
+0.6.0.post1 (2019-10-10)
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Issue `#24 <https://github.com/jazzband/contextlib2/issues/24>`__:
+  Correctly update NEWS.rst for the 0.6.0 release.
+
+0.6.0 (2019-09-21)
 ^^^^^^^^^^^^^^^^^^
 
 * Issue `#16 <https://github.com/jazzband/contextlib2/issues/16>`__:
@@ -16,6 +22,7 @@ Release History
   available (patch by Allan Harwood)
 
 * Updates to the default compatibility testing matrix:
+
   * Added: PyPy3, CPython 3.6 (maintenance), CPython 3.7 (development)
   * Dropped: CPython 3.3
 
