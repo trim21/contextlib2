@@ -6,9 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 6
+      max-parallel: 5
       matrix:
-        python-version: [2.7, 3.4, 3.5, 3.6, 3.7, 3.8, 'pypy2', 'pypy3']
+        python-version: [2.7, 3.5, 3.6, 3.7, 3.8, 'pypy2', 'pypy3']
 
     steps:
     - uses: actions/checkout@v2
