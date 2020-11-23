@@ -36,12 +36,12 @@ You can test against multiple versions of Python with
     pip install tox
     tox
 
-Versions currently tested in both tox and Travis CI are:
+Versions currently tested in both tox and GitHub Actions are:
 
 * CPython 2.7
-* CPython 3.4
 * CPython 3.5
 * CPython 3.6
 * CPython 3.7
+* CPython 3.8
 * PyPy
 * PyPy3
