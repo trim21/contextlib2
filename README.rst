@@ -2,18 +2,17 @@
    :target: https://jazzband.co/
    :alt: Jazzband
 
+.. image:: https://github.com/jazzband/sorl-thumbnail/workflows/Test/badge.svg
+   :target: https://github.com/jazzband/sorl-thumbnail/actions
+   :alt: Tests
+
+.. image:: https://codecov.io/gh/jazzband/contextlib2/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/jazzband/contextlib2
+   :alt: Coverage
+
 .. image:: https://readthedocs.org/projects/contextlib2/badge/?version=latest
    :target: https://contextlib2.readthedocs.org/
    :alt: Latest Docs
-
-.. image:: https://img.shields.io/travis/jazzband/contextlib2/master.svg
-   :target: http://travis-ci.org/jazzband/contextlib2
-
-.. image:: https://coveralls.io/repos/github/jazzband/contextlib2/badge.svg?branch=master
-   :target: https://coveralls.io/github/jazzband/contextlib2?branch=master
-
-.. image:: https://landscape.io/github/jazzband/contextlib2/master/landscape.svg
-   :target: https://landscape.io/github/jazzband/contextlib2/
 
 contextlib2 is a backport of the `standard library's contextlib
 module <https://docs.python.org/3.5/library/contextlib.html>`_ to
