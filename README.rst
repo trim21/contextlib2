@@ -2,8 +2,8 @@
    :target: https://jazzband.co/
    :alt: Jazzband
 
-.. image:: https://github.com/jazzband/sorl-thumbnail/workflows/Test/badge.svg
-   :target: https://github.com/jazzband/sorl-thumbnail/actions
+.. image:: https://github.com/jazzband/contextlib2/workflows/Test/badge.svg
+   :target: https://github.com/jazzband/contextlib2/actions
    :alt: Tests
 
 .. image:: https://codecov.io/gh/jazzband/contextlib2/branch/master/graph/badge.svg
