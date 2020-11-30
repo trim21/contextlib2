@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
-          key: release-${{ hashFiles('**/setup.py') }}
+          key: release-${{ hashFiles('**/tox.ini') }}
           restore-keys: |
             release-
 
