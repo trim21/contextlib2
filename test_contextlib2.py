@@ -455,7 +455,7 @@ class TestExitStack(unittest.TestCase):
                 else:
                     f = stack.callback(_exit)
                 self.assertIs(f, _exit)
-            for wrapper in stack._exit_callbacks:
+            for __, wrapper in stack._exit_callbacks:
                 self.assertIs(wrapper.__wrapped__, _exit)
                 self.assertNotEqual(wrapper.__name__, _exit.__name__)
                 self.assertIsNone(wrapper.__doc__, _exit.__doc__)
@@ -480,19 +480,19 @@ class TestExitStack(unittest.TestCase):
                 self.check_exc(*exc_details)
         with ExitStack() as stack:
             stack.push(_expect_ok)
-            self.assertIs(stack._exit_callbacks[-1], _expect_ok)
+            self.assertIs(stack._exit_callbacks[-1][1], _expect_ok)
             cm = ExitCM(_expect_ok)
             stack.push(cm)
-            self.assertIs(stack._exit_callbacks[-1].__self__, cm)
+            self.assertIs(stack._exit_callbacks[-1][1].__self__, cm)
             stack.push(_suppress_exc)
-            self.assertIs(stack._exit_callbacks[-1], _suppress_exc)
+            self.assertIs(stack._exit_callbacks[-1][1], _suppress_exc)
             cm = ExitCM(_expect_exc)
             stack.push(cm)
-            self.assertIs(stack._exit_callbacks[-1].__self__, cm)
+            self.assertIs(stack._exit_callbacks[-1][1].__self__, cm)
             stack.push(_expect_exc)
-            self.assertIs(stack._exit_callbacks[-1], _expect_exc)
+            self.assertIs(stack._exit_callbacks[-1][1], _expect_exc)
             stack.push(_expect_exc)
-            self.assertIs(stack._exit_callbacks[-1], _expect_exc)
+            self.assertIs(stack._exit_callbacks[-1][1], _expect_exc)
             1/0
 
     def test_enter_context(self):
@@ -510,7 +510,7 @@ class TestExitStack(unittest.TestCase):
                 result.append(4)
             self.assertIsNotNone(_exit)
             stack.enter_context(cm)
-            self.assertIs(stack._exit_callbacks[-1].__self__, cm)
+            self.assertIs(stack._exit_callbacks[-1][1].__self__, cm)
             result.append(2)
         self.assertEqual(result, [1, 2, 3, 4])
 
@@ -742,7 +742,7 @@ class TestExitStack(unittest.TestCase):
         stack = ExitStack()
         self.assertRaises(AttributeError, stack.enter_context, cm)
         stack.push(cm)
-        self.assertIs(stack._exit_callbacks[-1], cm)
+        self.assertIs(stack._exit_callbacks[-1][1], cm)
 
     def test_default_class_semantics(self):
         # For Python 2.x, this ensures compatibility with old-style classes
@@ -761,13 +761,13 @@ class TestExitStack(unittest.TestCase):
         cb = DefaultCallable()
         with ExitStack() as stack:
             stack.enter_context(cm)
-            self.assertIs(stack._exit_callbacks[-1].__self__, cm)
+            self.assertIs(stack._exit_callbacks[-1][1].__self__, cm)
             stack.push(cb)
             stack.push(cm)
-            self.assertIs(stack._exit_callbacks[-1].__self__, cm)
+            self.assertIs(stack._exit_callbacks[-1][1].__self__, cm)
             result.append("Running")
             stack.callback(cb)
-            self.assertIs(stack._exit_callbacks[-1].__wrapped__, cb)
+            self.assertIs(stack._exit_callbacks[-1][1].__wrapped__, cb)
         self.assertEqual(result, ["Enter", "Running",
                                   "Callback", "Exit",
                                   "Callback", "Exit",
