@@ -1,5 +1,5 @@
---- ../../cpython/Doc/library/contextlib.rst	2021-06-26 18:31:45.179532455 +1000
-+++ contextlib2.rst	2021-06-26 21:19:00.172517765 +1000
+--- ../cpython/Doc/library/contextlib.rst	2021-06-26 18:31:45.179532455 +1000
++++ docs/contextlib2.rst	2021-06-26 21:19:00.172517765 +1000
 @@ -1,20 +1,5 @@
 -:mod:`!contextlib` --- Utilities for :keyword:`!with`\ -statement contexts
 -==========================================================================
