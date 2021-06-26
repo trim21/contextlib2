@@ -517,7 +517,12 @@ class _BaseExitStack:
         Cannot suppress exceptions.
         """
         # Python 3.6/3.7 compatibility: no native positional-only args syntax
-        self, callback, *args = args
+        try:
+            self, callback, *args = args
+        except ValueError as exc:
+            exc_details = str(exc).partition("(")[2]
+            msg = "Not enough positional arguments {}".format(exc_details)
+            raise TypeError(msg) from None
         _exit_wrapper = self._create_cb_wrapper(callback, *args, **kwds)
 
         # We changed the signature, so using @wraps is not appropriate, but
@@ -666,7 +671,12 @@ class AsyncExitStack(_BaseExitStack, AbstractAsyncContextManager):
         Cannot suppress exceptions.
         """
         # Python 3.6/3.7 compatibility: no native positional-only args syntax
-        self, callback, *args = args
+        try:
+            self, callback, *args = args
+        except ValueError as exc:
+            exc_details = str(exc).partition("(")[2]
+            msg = "Not enough positional arguments {}".format(exc_details)
+            raise TypeError(msg) from None
         _exit_wrapper = self._create_async_cb_wrapper(callback, *args, **kwds)
 
         # We changed the signature, so using @wraps is not appropriate, but
