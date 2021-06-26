@@ -6,6 +6,8 @@ import warnings
 from collections import deque
 from functools import wraps
 
+from _collections_abc import _check_methods
+
 __all__ = ["contextmanager", "closing", "nullcontext",
            "AbstractContextManager",
            "ContextDecorator", "ExitStack",
@@ -14,43 +16,7 @@ __all__ = ["contextmanager", "closing", "nullcontext",
 # Backwards compatibility
 __all__ += ["ContextStack"]
 
-
-# Backport abc.ABC
-if sys.version_info[:2] >= (3, 4):
-    _abc_ABC = abc.ABC
-else:
-    _abc_ABC = abc.ABCMeta('ABC', (object,), {'__slots__': ()})
-
-
-# Backport classic class MRO
-def _classic_mro(C, result):
-    if C in result:
-        return
-    result.append(C)
-    for B in C.__bases__:
-        _classic_mro(B, result)
-    return result
-
-
-# Backport _collections_abc._check_methods
-def _check_methods(C, *methods):
-    try:
-        mro = C.__mro__
-    except AttributeError:
-        mro = tuple(_classic_mro(C, []))
-
-    for method in methods:
-        for B in mro:
-            if method in B.__dict__:
-                if B.__dict__[method] is None:
-                    return NotImplemented
-                break
-        else:
-            return NotImplemented
-    return True
-
-
-class AbstractContextManager(_abc_ABC):
+class AbstractContextManager(abc.ABC):
     """An abstract base class for context managers."""
 
     def __enter__(self):
@@ -313,58 +279,32 @@ class suppress(object):
         return exctype is not None and issubclass(exctype, self._exceptions)
 
 
-# Context manipulation is Python 3 only
-_HAVE_EXCEPTION_CHAINING = sys.version_info[0] >= 3
-if _HAVE_EXCEPTION_CHAINING:
-    def _make_context_fixer(frame_exc):
-        def _fix_exception_context(new_exc, old_exc):
-            # Context may not be correct, so find the end of the chain
-            while 1:
-                exc_context = new_exc.__context__
-                if exc_context is old_exc:
-                    # Context is already set correctly (see issue 20317)
-                    return
-                if exc_context is None or exc_context is frame_exc:
-                    break
-                new_exc = exc_context
-            # Change the end of the chain to point to the exception
-            # we expect it to reference
-            new_exc.__context__ = old_exc
-        return _fix_exception_context
+# Context manipulation helpers
+def _make_context_fixer(frame_exc):
+    def _fix_exception_context(new_exc, old_exc):
+        # Context may not be correct, so find the end of the chain
+        while 1:
+            exc_context = new_exc.__context__
+            if exc_context is old_exc:
+                # Context is already set correctly (see issue 20317)
+                return
+            if exc_context is None or exc_context is frame_exc:
+                break
+            new_exc = exc_context
+        # Change the end of the chain to point to the exception
+        # we expect it to reference
+        new_exc.__context__ = old_exc
+    return _fix_exception_context
 
-    def _reraise_with_existing_context(exc_details):
-        try:
-            # bare "raise exc_details[1]" replaces our carefully
-            # set-up context
-            fixed_ctx = exc_details[1].__context__
-            raise exc_details[1]
-        except BaseException:
-            exc_details[1].__context__ = fixed_ctx
-            raise
-else:
-    # No exception context in Python 2
-    def _make_context_fixer(frame_exc):
-        return lambda new_exc, old_exc: None
-
-    # Use 3 argument raise in Python 2,
-    # but use exec to avoid SyntaxError in Python 3
-    def _reraise_with_existing_context(exc_details):
-        exc_type, exc_value, exc_tb = exc_details
-        exec("raise exc_type, exc_value, exc_tb")
-
-# Handle old-style classes if they exist
-try:
-    from types import InstanceType
-except ImportError:
-    # Python 3 doesn't have old-style classes
-    _get_type = type
-else:
-    # Need to handle old-style context managers on Python 2
-    def _get_type(obj):
-        obj_type = type(obj)
-        if obj_type is InstanceType:
-            return obj.__class__  # Old-style class
-        return obj_type  # New-style class
+def _reraise_with_existing_context(exc_details):
+    try:
+        # bare "raise exc_details[1]" replaces our carefully
+        # set-up context
+        fixed_ctx = exc_details[1].__context__
+        raise exc_details[1]
+    except BaseException:
+        exc_details[1].__context__ = fixed_ctx
+        raise
 
 
 # Inspired by discussions on http://bugs.python.org/issue13585
@@ -407,7 +347,7 @@ class ExitStack(object):
         """
         # We use an unbound method rather than a bound method to follow
         # the standard lookup behaviour for special methods
-        _cb_type = _get_type(exit)
+        _cb_type = type(exit)
         try:
             exit_method = _cb_type.__exit__
         except AttributeError:
@@ -437,7 +377,7 @@ class ExitStack(object):
         returns the result of the __enter__ method.
         """
         # We look up the special methods on the type to match the with statement
-        _cm_type = _get_type(cm)
+        _cm_type = type(cm)
         _exit = _cm_type.__exit__
         result = _cm_type.__enter__(cm)
         self._push_cm_exit(cm, _exit)

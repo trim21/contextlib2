@@ -9,9 +9,6 @@ import __future__ # For PEP 479 conditional test
 import contextlib2
 from contextlib2 import *  # Tests __all__
 
-if not hasattr(unittest.TestCase, "assertRaisesRegex"):
-    import unittest2 as unittest
-
 requires_docstrings = unittest.skipIf(sys.flags.optimize >= 2,
                                       "Test requires docstrings")
 
