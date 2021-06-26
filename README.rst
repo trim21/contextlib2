@@ -34,9 +34,8 @@ The one exception is the included type hints file, which comes from the
 Development
 -----------
 
-contextlib2 has no runtime dependencies, but requires ``unittest2`` for testing
-on Python 2.x, as well as ``setuptools`` and ``wheel`` to generate universal
-wheel archives.
+contextlib2 has no runtime dependencies, but requires ``setuptools`` and
+``wheel`` at build time to generate universal wheel archives.
 
 Local testing is a matter of running::
 
