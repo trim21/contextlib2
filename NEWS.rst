@@ -4,8 +4,12 @@ Release History
 21.6.0 (2021-06-27)
 ^^^^^^^^^^^^^^^^^^^
 
-* Switched to calendar based versioning rather than continuing with pre-1.0
-  semantic versioning (`#29 <https://github.com/jazzband/contextlib2/issues/29>`__)
+* License update: due to the inclusion of type hints from the ``typeshed``
+  project, the ``contextlib2`` project is now under a combination of the
+  Python Software License (existing license) and the Apache License 2.0
+  (``typeshed`` license)
+* Switched to calendar based versioning using a "year"-"month"-"serial" scheme,
+  rather than continuing with pre-1.0 semantic versioning
 * Due to the inclusion of asynchronous features from Python 3.7+, the
   minimum supported Python version is now Python 3.6
   (`#29 <https://github.com/jazzband/contextlib2/issues/29>`__)
@@ -20,6 +24,12 @@ Release History
   * ``AsyncExitStack`` (added in Python 3.7)
   * async support in ``nullcontext`` (Python 3.10)
 
+* ``contextlib2`` now includes an adapted copy of the ``contextlib``
+  type hints from ``typeshed`` (the adaptation removes the Python version
+  dependencies from the API definition)
+  (`#33 <https://github.com/jazzband/contextlib2/issues/33>`__)
+* to incorporate the type hints stub file and the ``py.typed`` marker file,
+  ``contextlib2`` is now installed as a package rather than as a module
 * Updates to the default compatibility testing matrix:
 
   * Added: CPython 3.9, CPython 3.10
