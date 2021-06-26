@@ -9,9 +9,6 @@ import __future__ # For PEP 479 conditional test
 import contextlib2
 from contextlib2 import *  # Tests __all__
 
-if not hasattr(unittest.TestCase, "assertRaisesRegex"):
-    import unittest2 as unittest
-
 requires_docstrings = unittest.skipIf(sys.flags.optimize >= 2,
                                       "Test requires docstrings")
 
@@ -421,9 +418,6 @@ class TestContextDecorator(unittest.TestCase):
         test('something else')
         self.assertEqual(state, [1, 'something else', 999])
 
-# Detailed exception chaining checks only make sense on Python 3
-check_exception_chaining = contextlib2._HAVE_EXCEPTION_CHAINING
-
 class TestExitStack(unittest.TestCase):
 
     @requires_docstrings
@@ -592,18 +586,16 @@ class TestExitStack(unittest.TestCase):
                         with RaiseExc(ValueError):
                             1 / 0
         except IndexError as exc:
-            if check_exception_chaining:
-                self.assertIsInstance(exc.__context__, KeyError)
-                self.assertIsInstance(exc.__context__.__context__, AttributeError)
-                # Inner exceptions were suppressed
-                self.assertIsNone(exc.__context__.__context__.__context__)
+            self.assertIsInstance(exc.__context__, KeyError)
+            self.assertIsInstance(exc.__context__.__context__, AttributeError)
+            # Inner exceptions were suppressed
+            self.assertIsNone(exc.__context__.__context__.__context__)
         else:
             self.fail("Expected IndexError, but no exception was raised")
         # Check the inner exceptions
         inner_exc = SuppressExc.saved_details[1]
         self.assertIsInstance(inner_exc, ValueError)
-        if check_exception_chaining:
-            self.assertIsInstance(inner_exc.__context__, ZeroDivisionError)
+        self.assertIsInstance(inner_exc.__context__, ZeroDivisionError)
 
     def test_exit_exception_chaining(self):
         # Ensure exception chaining matches the reference behaviour
@@ -624,18 +616,16 @@ class TestExitStack(unittest.TestCase):
                 stack.callback(raise_exc, ValueError)
                 1 / 0
         except IndexError as exc:
-            if check_exception_chaining:
-                self.assertIsInstance(exc.__context__, KeyError)
-                self.assertIsInstance(exc.__context__.__context__, AttributeError)
-                # Inner exceptions were suppressed
-                self.assertIsNone(exc.__context__.__context__.__context__)
+            self.assertIsInstance(exc.__context__, KeyError)
+            self.assertIsInstance(exc.__context__.__context__, AttributeError)
+            # Inner exceptions were suppressed
+            self.assertIsNone(exc.__context__.__context__.__context__)
         else:
             self.fail("Expected IndexError, but no exception was raised")
         # Check the inner exceptions
         inner_exc = saved_details[0][1]
         self.assertIsInstance(inner_exc, ValueError)
-        if check_exception_chaining:
-            self.assertIsInstance(inner_exc.__context__, ZeroDivisionError)
+        self.assertIsInstance(inner_exc.__context__, ZeroDivisionError)
 
     def test_exit_exception_non_suppressing(self):
         # http://bugs.python.org/issue19092
@@ -689,12 +679,11 @@ class TestExitStack(unittest.TestCase):
                 raise exc1
         except Exception as exc:
             self.assertIs(exc, exc4)
-            if check_exception_chaining:
-                self.assertIs(exc.__context__, exc3)
-                self.assertIs(exc.__context__.__context__, exc2)
-                self.assertIs(exc.__context__.__context__.__context__, exc1)
-                self.assertIsNone(
-                        exc.__context__.__context__.__context__.__context__)
+            self.assertIs(exc.__context__, exc3)
+            self.assertIs(exc.__context__.__context__, exc2)
+            self.assertIs(exc.__context__.__context__.__context__, exc1)
+            self.assertIsNone(
+                    exc.__context__.__context__.__context__.__context__)
 
     def test_exit_exception_with_existing_context(self):
         # Addresses a lack of test coverage discovered after checking in a
@@ -716,16 +705,13 @@ class TestExitStack(unittest.TestCase):
                 raise exc1
         except Exception as exc:
             self.assertIs(exc, exc5)
-            if check_exception_chaining:
-                self.assertIs(exc.__context__, exc4)
-                self.assertIs(exc.__context__.__context__, exc3)
-                self.assertIs(exc.__context__.__context__.__context__, exc2)
-                self.assertIs(
-                    exc.__context__.__context__.__context__.__context__, exc1)
-                self.assertIsNone(
-                    exc.__context__.__context__.__context__.__context__.__context__)
-
-
+            self.assertIs(exc.__context__, exc4)
+            self.assertIs(exc.__context__.__context__, exc3)
+            self.assertIs(exc.__context__.__context__.__context__, exc2)
+            self.assertIs(
+                exc.__context__.__context__.__context__.__context__, exc1)
+            self.assertIsNone(
+                exc.__context__.__context__.__context__.__context__.__context__)
 
     def test_body_exception_suppress(self):
         def suppress_exc(*exc_details):
@@ -824,10 +810,9 @@ class TestExitStack(unittest.TestCase):
         exc = err_ctx.exception
         self.assertIsInstance(exc, UniqueException)
         self.assertIsInstance(exc.__cause__, UniqueRuntimeError)
-        if check_exception_chaining:
-            self.assertIs(exc.__context__, exc.__cause__)
-            self.assertIsNone(exc.__cause__.__context__)
-            self.assertIsNone(exc.__cause__.__cause__)
+        self.assertIs(exc.__context__, exc.__cause__)
+        self.assertIsNone(exc.__cause__.__context__)
+        self.assertIsNone(exc.__cause__.__cause__)
 
 
 class TestRedirectStream:
