@@ -1,6 +1,33 @@
 Release History
 ---------------
 
+21.6.0 (2021-06-TBD)
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Switched to calendar based versioning rather than continuing with pre-1.0
+  semantic versioning (`#29 <https://github.com/jazzband/contextlib2/issues/29>`__)
+* Due to the inclusion of asynchronous features from Python 3.7+, the
+  minimum supported Python version is now Python 3.6
+  (`#29 <https://github.com/jazzband/contextlib2/issues/29>`__)
+* (WIP) Synchronised with the Python 3.10 version of contextlib, bringing the
+  following new features to Python 3.6+ (
+  `#12 <https://github.com/jazzband/contextlib2/issues/12>`__,
+  `#19 <https://github.com/jazzband/contextlib2/issues/19>`__,
+  `#27 <https://github.com/jazzband/contextlib2/issues/27>`__):
+
+  * ``asyncontextmanager`` (Python 3.7)
+  * ``aclosing`` (Python 3.10)
+  * ``AbstractAsyncContextManager`` (Python 3.7)
+  * ``AsyncContextDecorator`` (Python 3.10)
+  * ``AsyncExitStack`` (Python 3.7)
+  * async support in ``nullcontext`` (Python 3.10)
+
+* Updates to the default compatibility testing matrix:
+
+  * Added: CPython 3.9, CPython 3.10
+  * Dropped: CPython 2.7, CPython 3.5, PyPy2
+
+
 0.6.0.post1 (2019-10-10)
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
