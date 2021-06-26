@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'contextlib2'
-copyright = u'2011, Nick Coghlan'
+copyright = u'2021, Nick Coghlan'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -217,5 +217,5 @@ man_pages = [
 ]
 
 
-# Example configuration for intersphinx: refer to the Python 3 standard library.
-intersphinx_mapping = {'http://docs.python.org/py3k': None}
+# Configuration for intersphinx: refer to the Python 3 standard library.
+intersphinx_mapping = {'http://docs.python.org/3': None}

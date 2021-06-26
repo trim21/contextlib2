@@ -1,0 +1,194 @@
+--- ../../cpython/Doc/library/contextlib.rst	2021-06-26 18:31:45.179532455 +1000
++++ contextlib2.rst	2021-06-26 21:19:00.172517765 +1000
+@@ -1,20 +1,5 @@
+-:mod:`!contextlib` --- Utilities for :keyword:`!with`\ -statement contexts
+-==========================================================================
+-
+-.. module:: contextlib
+-   :synopsis: Utilities for with-statement contexts.
+-
+-**Source code:** :source:`Lib/contextlib.py`
+-
+---------------
+-
+-This module provides utilities for common tasks involving the :keyword:`with`
+-statement. For more information see also :ref:`typecontextmanager` and
+-:ref:`context-managers`.
+-
+-
+-Utilities
+----------
++API Reference
++-------------
+ 
+ Functions and classes provided:
+ 
+@@ -26,8 +11,8 @@
+    ``self`` while :meth:`object.__exit__` is an abstract method which by default
+    returns ``None``. See also the definition of :ref:`typecontextmanager`.
+ 
+-   .. versionadded:: 3.6
+-
++   .. versionadded:: 0.6.0
++      Part of the standard library in Python 3.6 and later
+ 
+ .. class:: AbstractAsyncContextManager
+ 
+@@ -38,8 +23,8 @@
+    returns ``None``. See also the definition of
+    :ref:`async-context-managers`.
+ 
+-   .. versionadded:: 3.7
+-
++   .. versionadded:: 21.6.0
++      Part of the standard library in Python 3.7 and later
+ 
+ .. decorator:: contextmanager
+ 
+@@ -93,9 +78,6 @@
+    created by :func:`contextmanager` to meet the requirement that context
+    managers support multiple invocations in order to be used as decorators).
+ 
+-   .. versionchanged:: 3.2
+-      Use of :class:`ContextDecorator`.
+-
+ 
+ .. decorator:: asynccontextmanager
+ 
+@@ -124,7 +106,10 @@
+           async with get_connection() as conn:
+               return conn.query('SELECT ...')
+ 
+-   .. versionadded:: 3.7
++   .. versionadded:: 21.6.0
++      Part of the standard library in Python 3.7 and later, enhanced in
++      Python 3.10 and later to allow created async context managers to be used
++      as async function decorators.
+ 
+    Context managers defined with :func:`asynccontextmanager` can be used
+    either as decorators or with :keyword:`async with` statements::
+@@ -147,10 +132,6 @@
+    created by :func:`asynccontextmanager` to meet the requirement that context
+    managers support multiple invocations in order to be used as decorators.
+ 
+-  .. versionchanged:: 3.10
+-     Async context managers created with :func:`asynccontextmanager` can
+-     be used as decorators.
+-
+ 
+ .. function:: closing(thing)
+ 
+@@ -209,7 +190,8 @@
+    variables work as expected, and the exit code isn't run after the
+    lifetime of some task it depends on).
+ 
+-   .. versionadded:: 3.10
++   .. versionadded:: 21.6.0
++      Part of the standard library in Python 3.10 and later
+ 
+ 
+ .. _simplifying-support-for-single-optional-context-managers:
+@@ -257,11 +239,11 @@
+           async with cm as session:
+               # Send http requests with session
+ 
+-   .. versionadded:: 3.7
+-
+-   .. versionchanged:: 3.10
+-      :term:`asynchronous context manager` support was added.
++   .. versionadded:: 0.6.0
++      Part of the standard library in Python 3.7 and later
+ 
++   .. versionchanged:: 21.6.0
++      Updated to Python 3.10 version with :term:`asynchronous context manager` support
+ 
+ 
+ .. function:: suppress(*exceptions)
+@@ -300,7 +282,8 @@
+ 
+    This context manager is :ref:`reentrant <reentrant-cms>`.
+ 
+-   .. versionadded:: 3.4
++   .. versionadded:: 0.5
++      Part of the standard library in Python 3.4 and later
+ 
+ 
+ .. function:: redirect_stdout(new_target)
+@@ -340,7 +323,8 @@
+ 
+    This context manager is :ref:`reentrant <reentrant-cms>`.
+ 
+-   .. versionadded:: 3.4
++   .. versionadded:: 0.5
++      Part of the standard library in Python 3.4 and later
+ 
+ 
+ .. function:: redirect_stderr(new_target)
+@@ -350,7 +334,8 @@
+ 
+    This context manager is :ref:`reentrant <reentrant-cms>`.
+ 
+-   .. versionadded:: 3.5
++   .. versionadded:: 0.5
++      Part of the standard library in Python 3.5 and later
+ 
+ 
+ .. class:: ContextDecorator()
+@@ -426,8 +411,6 @@
+       statements. If this is not the case, then the original construct with the
+       explicit :keyword:`!with` statement inside the function should be used.
+ 
+-   .. versionadded:: 3.2
+-
+ 
+ .. class:: AsyncContextDecorator
+ 
+@@ -465,7 +448,8 @@
+       The bit in the middle
+       Finishing
+ 
+-   .. versionadded:: 3.10
++   .. versionadded:: 21.6.0
++      Part of the standard library in Python 3.10 and later
+ 
+ 
+ .. class:: ExitStack()
+@@ -504,7 +488,8 @@
+    foundation for higher level context managers that manipulate the exit
+    stack in application specific ways.
+ 
+-   .. versionadded:: 3.3
++   .. versionadded:: 0.4
++      Part of the standard library in Python 3.3 and later
+ 
+    .. method:: enter_context(cm)
+ 
+@@ -580,7 +565,7 @@
+    The :meth:`close` method is not implemented, :meth:`aclose` must be used
+    instead.
+ 
+-   .. coroutinemethod:: enter_async_context(cm)
++   .. method:: enter_async_context(cm)
+ 
+       Similar to :meth:`enter_context` but expects an asynchronous context
+       manager.
+@@ -594,7 +579,7 @@
+ 
+       Similar to :meth:`callback` but expects a coroutine function.
+ 
+-   .. coroutinemethod:: aclose()
++   .. method:: aclose()
+ 
+       Similar to :meth:`close` but properly handles awaitables.
+ 
+@@ -607,7 +592,9 @@
+           # the async with statement, even if attempts to open a connection
+           # later in the list raise an exception.
+ 
+-   .. versionadded:: 3.7
++   .. versionadded:: 21.6.0
++      Part of the standard library in Python 3.7 and later
++
+ 
+ Examples and Recipes
+ --------------------
