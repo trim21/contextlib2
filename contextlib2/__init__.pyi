@@ -19,8 +19,11 @@ from typing import (
 )
 from typing_extensions import ParamSpec, Protocol
 
+# Note: the various 'if True:' guards replace sys.version checks in the
+# original typeshed file that don't apply to the contextlib2 backport API
+
 AbstractContextManager = ContextManager
-if sys.version_info >= (3, 7):
+if True:
     AbstractAsyncContextManager = AsyncContextManager
 
 _T = TypeVar("_T")
@@ -38,7 +41,7 @@ class _GeneratorContextManager(ContextManager[_T_co]):
 # type ignore to deal with incomplete ParamSpec support in mypy
 def contextmanager(func: Callable[_P, Iterator[_T]]) -> Callable[_P, _GeneratorContextManager[_T]]: ...  # type: ignore
 
-if sys.version_info >= (3, 7):
+if True:
     def asynccontextmanager(func: Callable[_P, AsyncIterator[_T]]) -> Callable[_P, AsyncContextManager[_T]]: ...  # type: ignore
 
 class _SupportsClose(Protocol):
@@ -49,7 +52,7 @@ _SupportsCloseT = TypeVar("_SupportsCloseT", bound=_SupportsClose)
 class closing(ContextManager[_SupportsCloseT]):
     def __init__(self, thing: _SupportsCloseT) -> None: ...
 
-if sys.version_info >= (3, 10):
+if True:
     class _SupportsAclose(Protocol):
         async def aclose(self) -> object: ...
     _SupportsAcloseT = TypeVar("_SupportsAcloseT", bound=_SupportsAclose)
@@ -91,7 +94,7 @@ class ExitStack(ContextManager[ExitStack]):
         __traceback: Optional[TracebackType],
     ) -> bool: ...
 
-if sys.version_info >= (3, 7):
+if True:
     _S = TypeVar("_S", bound=AsyncExitStack)
 
     _ExitCoroFunc = Callable[[Optional[Type[BaseException]], Optional[BaseException], Optional[TracebackType]], Awaitable[bool]]
@@ -115,7 +118,7 @@ if sys.version_info >= (3, 7):
             __traceback: Optional[TracebackType],
         ) -> Awaitable[bool]: ...
 
-if sys.version_info >= (3, 7):
+if True:
     @overload
     def nullcontext(enter_result: _T) -> ContextManager[_T]: ...
     @overload
