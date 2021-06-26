@@ -1,2 +1,5 @@
-include *.py *.txt *.rst *.md *.ini MANIFEST.in
-recursive-include dev test docs *.rst *.py make.bat Makefile
+include *.py *.cfg *.txt *.rst *.md *.ini MANIFEST.in
+recursive-include contextlib2 *.py *.pyi py.typed
+recursive-include docs *.rst *.py make.bat Makefile
+recursive-include test *.py
+recursive-include dev *.patch

@@ -18,8 +18,18 @@ contextlib2 is a backport of the `standard library's contextlib
 module <https://docs.python.org/3/library/contextlib.html>`_ to
 earlier Python versions.
 
-It also serves as a real world proving ground for possible future
+It also sometimes serves as a real world proving ground for possible future
 enhancements to the standard library version.
+
+Licensing
+---------
+
+As a backport of Python standard library software, the implementation, test
+suite and other supporting files for this project are distributed under the
+Python Software License used for the CPython reference implementation.
+
+The one exception is the included type hints file, which comes from the
+``typeshed`` project, and is hence distributed under the Apache License 2.0.
 
 Development
 -----------
@@ -53,9 +63,14 @@ Updating to a new stdlib reference version
 As of Python 3.10, 3 files needed to be copied from the CPython reference
 implementation to contextlib2:
 
-* ``Lib/contextlib.py`` -> ``contextlib2.py``
+* ``Lib/contextlib.py`` -> ``contextlib2/__init__.py``
 * ``Lib/test/test_contextlib.py`` -> ``test/test_contextlib.py``
 * ``Lib/test/test_contextlib_async.py`` -> ``test/test_contextlib_async.py``
+
+The corresponding version of ``contextlib2/__init__.py`` also needs to be
+retrieved from the ``typeshed`` project::
+
+    wget https://raw.githubusercontent.com/python/typeshed/master/stdlib/contextlib.pyi
 
 For the 3.10 sync, the only changes needed to the test files were to import from
 ``contextlib2`` rather than ``contextlib``. The test directory is laid out so

@@ -8,7 +8,8 @@ setup(
     name='contextlib2',
     version=open('VERSION.txt').read().strip(),
     python_requires='>=3.6',
-    py_modules=['contextlib2'],
+    packages=['contextlib2'],
+    include_package_data=True,
     license='PSF License',
     description='Backports and enhancements for the contextlib module',
     long_description=open('README.rst').read(),
@@ -17,6 +18,7 @@ setup(
     url='http://contextlib2.readthedocs.org',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
+        'License :: OSI Approved :: Apache Software License',
         'License :: OSI Approved :: Python Software Foundation License',
         # These are the Python versions tested, it may work on others
         # It definitely won't work on versions without native async support
