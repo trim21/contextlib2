@@ -133,7 +133,7 @@ class _GeneratorContextManager(ContextDecorator):
                 # Likewise, avoid suppressing if a StopIteration exception
                 # was passed to throw() and later wrapped into a RuntimeError
                 # (see PEP 479).
-                if _HAVE_EXCEPTION_CHAINING and exc.__cause__ is value:
+                if exc.__cause__ is value:
                     return False
                 raise
             except:
