@@ -60,14 +60,15 @@ Versions currently tested in both tox and GitHub Actions are:
 Updating to a new stdlib reference version
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As of Python 3.10, 3 files needed to be copied from the CPython reference
+As of Python 3.10, 4 files needed to be copied from the CPython reference
 implementation to contextlib2:
 
+* ``Doc/contextlib.rst`` -> ``docs/contextlib2.rst``
 * ``Lib/contextlib.py`` -> ``contextlib2/__init__.py``
 * ``Lib/test/test_contextlib.py`` -> ``test/test_contextlib.py``
 * ``Lib/test/test_contextlib_async.py`` -> ``test/test_contextlib_async.py``
 
-The corresponding version of ``contextlib2/__init__.py`` also needs to be
+The corresponding version of ``contextlib2/__init__.pyi`` also needs to be
 retrieved from the ``typeshed`` project::
 
     wget https://raw.githubusercontent.com/python/typeshed/master/stdlib/contextlib.pyi
@@ -77,6 +78,14 @@ For the 3.10 sync, the only changes needed to the test files were to import from
 that the test suite's imports from ``test.support`` work the same way they do in
 the main CPython test suite.
 
-The changes made to the ``contextlib2.py`` file to get it to run on the older
-versions (and to add back in the deprecated APIs that never graduated to the
-standard library version) are saved as a patch file in the ``dev`` directory.
+The following patch files are saved in the ``dev`` directory:
+
+* changes made to ``contextlib2/__init__.py`` to get it to run on the older
+  versions (and to add back in the deprecated APIs that never graduated to
+  the standard library version)
+* changes made to ``contextlib2/__init__.pyi`` to make the Python version
+  guards unconditional (since the ``contextlib2`` API is the same on all
+  supported versions)
+* changes made to ``docs/contextlib2.rst`` to use ``contextlib2`` version
+  numbers in the version added/changed notes and to integrate the module
+  documentation with the rest of the project documentation
