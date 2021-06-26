@@ -6,7 +6,17 @@ import warnings
 import _collections_abc
 from collections import deque
 from functools import wraps
-from types import MethodType, GenericAlias
+from types import MethodType
+
+# Python 3.6/3.7/3.8 compatibility: GenericAlias may not be defined
+try:
+    from types import GenericAlias
+except ImportError:
+    # If the real GenericAlias type doesn't exist, __class_getitem__ won't be used,
+    # so the fallback placeholder doesn't need to provide any meaningful behaviour
+    class GenericAlias:
+        pass
+
 
 __all__ = ["asynccontextmanager", "contextmanager", "closing", "nullcontext",
            "AbstractContextManager", "AbstractAsyncContextManager",
@@ -450,7 +460,9 @@ class _BaseExitStack:
         return MethodType(cm_exit, cm)
 
     @staticmethod
-    def _create_cb_wrapper(callback, /, *args, **kwds):
+    def _create_cb_wrapper(*args, **kwds):
+        # Python 3.6/3.7 compatibility: no native positional-only args syntax
+        callback, *args = args
         def _exit_wrapper(exc_type, exc, tb):
             callback(*args, **kwds)
         return _exit_wrapper
@@ -499,11 +511,13 @@ class _BaseExitStack:
         self._push_cm_exit(cm, _exit)
         return result
 
-    def callback(self, callback, /, *args, **kwds):
+    def callback(*args, **kwds):
         """Registers an arbitrary callback and arguments.
 
         Cannot suppress exceptions.
         """
+        # Python 3.6/3.7 compatibility: no native positional-only args syntax
+        self, callback, *args = args
         _exit_wrapper = self._create_cb_wrapper(callback, *args, **kwds)
 
         # We changed the signature, so using @wraps is not appropriate, but
@@ -609,7 +623,9 @@ class AsyncExitStack(_BaseExitStack, AbstractAsyncContextManager):
         return MethodType(cm_exit, cm)
 
     @staticmethod
-    def _create_async_cb_wrapper(callback, /, *args, **kwds):
+    def _create_async_cb_wrapper(*args, **kwds):
+        # Python 3.6/3.7 compatibility: no native positional-only args syntax
+        callback, *args = args
         async def _exit_wrapper(exc_type, exc, tb):
             await callback(*args, **kwds)
         return _exit_wrapper
@@ -644,11 +660,13 @@ class AsyncExitStack(_BaseExitStack, AbstractAsyncContextManager):
             self._push_async_cm_exit(exit, exit_method)
         return exit  # Allow use as a decorator
 
-    def push_async_callback(self, callback, /, *args, **kwds):
+    def push_async_callback(*args, **kwds):
         """Registers an arbitrary coroutine function and arguments.
 
         Cannot suppress exceptions.
         """
+        # Python 3.6/3.7 compatibility: no native positional-only args syntax
+        self, callback, *args = args
         _exit_wrapper = self._create_async_cb_wrapper(callback, *args, **kwds)
 
         # We changed the signature, so using @wraps is not appropriate, but
