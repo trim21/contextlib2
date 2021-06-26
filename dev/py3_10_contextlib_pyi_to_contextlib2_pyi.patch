@@ -1,0 +1,58 @@
+--- ../contextlib.pyi	2021-06-26 21:36:16.491964153 +1000
++++ contextlib2/__init__.pyi	2021-06-26 21:41:08.109598690 +1000
+@@ -1,3 +1,6 @@
++# Type hints copied from the typeshed project under the Apache License 2.0
++# https://github.com/python/typeshed/blob/64c85cdd449ccaff90b546676220c9ecfa6e697f/LICENSE
++
+ import sys
+ from types import TracebackType
+ from typing import (
+@@ -16,8 +19,11 @@
+ )
+ from typing_extensions import ParamSpec, Protocol
+ 
++# Note: the various 'if True:' guards replace sys.version checks in the
++# original typeshed file that don't apply to the contextlib2 backport API
++
+ AbstractContextManager = ContextManager
+-if sys.version_info >= (3, 7):
++if True:
+     AbstractAsyncContextManager = AsyncContextManager
+ 
+ _T = TypeVar("_T")
+@@ -35,7 +41,7 @@
+ # type ignore to deal with incomplete ParamSpec support in mypy
+ def contextmanager(func: Callable[_P, Iterator[_T]]) -> Callable[_P, _GeneratorContextManager[_T]]: ...  # type: ignore
+ 
+-if sys.version_info >= (3, 7):
++if True:
+     def asynccontextmanager(func: Callable[_P, AsyncIterator[_T]]) -> Callable[_P, AsyncContextManager[_T]]: ...  # type: ignore
+ 
+ class _SupportsClose(Protocol):
+@@ -46,7 +52,7 @@
+ class closing(ContextManager[_SupportsCloseT]):
+     def __init__(self, thing: _SupportsCloseT) -> None: ...
+ 
+-if sys.version_info >= (3, 10):
++if True:
+     class _SupportsAclose(Protocol):
+         async def aclose(self) -> object: ...
+     _SupportsAcloseT = TypeVar("_SupportsAcloseT", bound=_SupportsAclose)
+@@ -88,7 +94,7 @@
+         __traceback: Optional[TracebackType],
+     ) -> bool: ...
+ 
+-if sys.version_info >= (3, 7):
++if True:
+     _S = TypeVar("_S", bound=AsyncExitStack)
+ 
+     _ExitCoroFunc = Callable[[Optional[Type[BaseException]], Optional[BaseException], Optional[TracebackType]], Awaitable[bool]]
+@@ -112,7 +118,7 @@
+             __traceback: Optional[TracebackType],
+         ) -> Awaitable[bool]: ...
+ 
+-if sys.version_info >= (3, 7):
++if True:
+     @overload
+     def nullcontext(enter_result: _T) -> ContextManager[_T]: ...
+     @overload
