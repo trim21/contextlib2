@@ -1,5 +1,5 @@
---- ../contextlib.pyi	2021-06-26 21:36:16.491964153 +1000
-+++ contextlib2/__init__.pyi	2021-06-26 21:41:08.109598690 +1000
+--- ../contextlib.pyi	2021-06-27 16:02:28.004872421 +1000
++++ contextlib2/__init__.pyi	2021-06-27 16:00:25.431733524 +1000
 @@ -1,3 +1,6 @@
 +# Type hints copied from the typeshed project under the Apache License 2.0
 +# https://github.com/python/typeshed/blob/64c85cdd449ccaff90b546676220c9ecfa6e697f/LICENSE
@@ -7,12 +7,15 @@
  import sys
  from types import TracebackType
  from typing import (
-@@ -16,8 +19,11 @@
+@@ -16,8 +19,14 @@
  )
  from typing_extensions import ParamSpec, Protocol
  
-+# Note: the various 'if True:' guards replace sys.version checks in the
-+# original typeshed file that don't apply to the contextlib2 backport API
++# contextlib2 API adaptation notes:
++# * the various 'if True:' guards replace sys.version checks in the original
++#   typeshed file (those APIs are available on all supported versions)
++# * deliberately omitted APIs are listed in `dev/mypy.allowlist`
++#   (e.g. deprecated experimental APIs that never graduated to the stdlib)
 +
  AbstractContextManager = ContextManager
 -if sys.version_info >= (3, 7):
@@ -20,7 +23,7 @@
      AbstractAsyncContextManager = AsyncContextManager
  
  _T = TypeVar("_T")
-@@ -35,7 +41,7 @@
+@@ -35,7 +44,7 @@
  # type ignore to deal with incomplete ParamSpec support in mypy
  def contextmanager(func: Callable[_P, Iterator[_T]]) -> Callable[_P, _GeneratorContextManager[_T]]: ...  # type: ignore
  
@@ -29,7 +32,7 @@
      def asynccontextmanager(func: Callable[_P, AsyncIterator[_T]]) -> Callable[_P, AsyncContextManager[_T]]: ...  # type: ignore
  
  class _SupportsClose(Protocol):
-@@ -46,7 +52,7 @@
+@@ -46,7 +55,7 @@
  class closing(ContextManager[_SupportsCloseT]):
      def __init__(self, thing: _SupportsCloseT) -> None: ...
  
@@ -38,7 +41,7 @@
      class _SupportsAclose(Protocol):
          async def aclose(self) -> object: ...
      _SupportsAcloseT = TypeVar("_SupportsAcloseT", bound=_SupportsAclose)
-@@ -88,7 +94,7 @@
+@@ -88,7 +97,7 @@
          __traceback: Optional[TracebackType],
      ) -> bool: ...
  
@@ -47,12 +50,12 @@
      _S = TypeVar("_S", bound=AsyncExitStack)
  
      _ExitCoroFunc = Callable[[Optional[Type[BaseException]], Optional[BaseException], Optional[TracebackType]], Awaitable[bool]]
-@@ -112,7 +118,7 @@
+@@ -112,7 +121,7 @@
              __traceback: Optional[TracebackType],
          ) -> Awaitable[bool]: ...
  
 -if sys.version_info >= (3, 7):
 +if True:
-     @overload
-     def nullcontext(enter_result: _T) -> ContextManager[_T]: ...
-     @overload
+     class nullcontext(AbstractContextManager[_T]):
+         enter_result: _T
+         @overload

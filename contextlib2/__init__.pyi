@@ -19,8 +19,11 @@ from typing import (
 )
 from typing_extensions import ParamSpec, Protocol
 
-# Note: the various 'if True:' guards replace sys.version checks in the
-# original typeshed file that don't apply to the contextlib2 backport API
+# contextlib2 API adaptation notes:
+# * the various 'if True:' guards replace sys.version checks in the original
+#   typeshed file (those APIs are available on all supported versions)
+# * deliberately omitted APIs are listed in `dev/mypy.allowlist`
+#   (e.g. deprecated experimental APIs that never graduated to the stdlib)
 
 AbstractContextManager = ContextManager
 if True:
@@ -119,7 +122,11 @@ if True:
         ) -> Awaitable[bool]: ...
 
 if True:
-    @overload
-    def nullcontext(enter_result: _T) -> ContextManager[_T]: ...
-    @overload
-    def nullcontext() -> ContextManager[None]: ...
+    class nullcontext(AbstractContextManager[_T]):
+        enter_result: _T
+        @overload
+        def __init__(self: nullcontext[None], enter_result: None = ...) -> None: ...
+        @overload
+        def __init__(self: nullcontext[_T], enter_result: _T) -> None: ...
+        def __enter__(self) -> _T: ...
+        def __exit__(self, *exctype: Any) -> bool: ...
