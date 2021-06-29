@@ -1,5 +1,5 @@
---- ../contextlib.pyi	2021-06-27 16:02:28.004872421 +1000
-+++ contextlib2/__init__.pyi	2021-06-27 16:00:25.431733524 +1000
+--- ../contextlib.pyi	2021-06-29 09:51:57.388558713 +0100
++++ contextlib2/__init__.pyi	2021-06-29 09:51:51.688457760 +0100
 @@ -1,3 +1,6 @@
 +# Type hints copied from the typeshed project under the Apache License 2.0
 +# https://github.com/python/typeshed/blob/64c85cdd449ccaff90b546676220c9ecfa6e697f/LICENSE
@@ -39,7 +39,7 @@
 -if sys.version_info >= (3, 10):
 +if True:
      class _SupportsAclose(Protocol):
-         async def aclose(self) -> object: ...
+         def aclose(self) -> Awaitable[object]: ...
      _SupportsAcloseT = TypeVar("_SupportsAcloseT", bound=_SupportsAclose)
 @@ -88,7 +97,7 @@
          __traceback: Optional[TracebackType],
