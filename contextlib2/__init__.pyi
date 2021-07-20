@@ -2,7 +2,7 @@
 # https://github.com/python/typeshed/blob/64c85cdd449ccaff90b546676220c9ecfa6e697f/LICENSE
 
 import sys
-from _typeshed import Self
+from ._typeshed import Self
 from types import TracebackType
 from typing import (
     IO,
