@@ -1,13 +1,16 @@
---- ../contextlib.pyi	2021-06-29 19:05:46.515307191 +0100
-+++ contextlib2/__init__.pyi	2021-06-29 19:15:26.814620184 +0100
-@@ -1,3 +1,6 @@
+--- ../contextlib.pyi	2021-07-16 08:26:16.409945194 +0100
++++ contextlib2/__init__.pyi	2021-07-20 14:10:49.571136279 +0100
+@@ -1,5 +1,8 @@
 +# Type hints copied from the typeshed project under the Apache License 2.0
 +# https://github.com/python/typeshed/blob/64c85cdd449ccaff90b546676220c9ecfa6e697f/LICENSE
 +
  import sys
+-from _typeshed import Self
++from ._typeshed import Self
  from types import TracebackType
  from typing import (
-@@ -16,8 +19,14 @@
+     IO,
+@@ -17,8 +20,14 @@
  )
  from typing_extensions import ParamSpec, Protocol
  
@@ -23,7 +26,7 @@
      AbstractAsyncContextManager = AsyncContextManager
  
  _T = TypeVar("_T")
-@@ -35,7 +44,7 @@
+@@ -36,7 +45,7 @@
  # type ignore to deal with incomplete ParamSpec support in mypy
  def contextmanager(func: Callable[_P, Iterator[_T]]) -> Callable[_P, _GeneratorContextManager[_T]]: ...  # type: ignore
  
@@ -32,7 +35,7 @@
      def asynccontextmanager(func: Callable[_P, AsyncIterator[_T]]) -> Callable[_P, AsyncContextManager[_T]]: ...  # type: ignore
  
  class _SupportsClose(Protocol):
-@@ -46,7 +55,7 @@
+@@ -47,7 +56,7 @@
  class closing(ContextManager[_SupportsCloseT]):
      def __init__(self, thing: _SupportsCloseT) -> None: ...
  
@@ -41,16 +44,16 @@
      class _SupportsAclose(Protocol):
          def aclose(self) -> Awaitable[object]: ...
      _SupportsAcloseT = TypeVar("_SupportsAcloseT", bound=_SupportsAclose)
-@@ -88,7 +97,7 @@
+@@ -87,7 +96,7 @@
          __traceback: Optional[TracebackType],
      ) -> bool: ...
  
 -if sys.version_info >= (3, 7):
 +if True:
-     _S = TypeVar("_S", bound=AsyncExitStack)
- 
      _ExitCoroFunc = Callable[[Optional[Type[BaseException]], Optional[BaseException], Optional[TracebackType]], Awaitable[bool]]
-@@ -112,7 +121,8 @@
+     _CallbackCoroFunc = Callable[..., Awaitable[Any]]
+     _ACM_EF = TypeVar("_ACM_EF", AsyncContextManager[Any], _ExitCoroFunc)
+@@ -109,7 +118,8 @@
              __traceback: Optional[TracebackType],
          ) -> Awaitable[bool]: ...
  
@@ -60,7 +63,7 @@
      class nullcontext(AbstractContextManager[_T], AbstractAsyncContextManager[_T]):
          enter_result: _T
          @overload
-@@ -123,13 +133,3 @@
+@@ -120,13 +130,3 @@
          def __exit__(self, *exctype: Any) -> None: ...
          async def __aenter__(self) -> _T: ...
          async def __aexit__(self, *exctype: Any) -> None: ...
