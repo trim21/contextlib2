@@ -13,7 +13,7 @@ setup(
     license='PSF License',
     description='Backports and enhancements for the contextlib module',
     long_description=open('README.rst').read(),
-    author='Nick Coghlan',
+    author='Alyssa Coghlan',
     author_email='ncoghlan@gmail.com',
     url='http://contextlib2.readthedocs.org',
     classifiers=[

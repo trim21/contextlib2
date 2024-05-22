@@ -64,7 +64,7 @@ Release History
 ^^^^^^^^^^^^^^^^^^
 
 * Thanks to the welcome efforts of Jannis Leidel, contextlib2 is now a
-  [Jazzband](https://jazzband.co/) project! This means that I (Nick Coghlan)
+  [Jazzband](https://jazzband.co/) project! This means that I (Alyssa Coghlan)
   am no longer a single point of failure for backports of future contextlib
   updates to earlier Python versions.
 
