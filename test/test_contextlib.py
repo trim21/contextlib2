@@ -494,7 +494,8 @@ class TestContextDecorator(unittest.TestCase):
             def __exit__(self, *exc):
                 pass
 
-        with self.assertRaises(AttributeError):
+        # 3.11+ raises TypeError, older versions raise AttributeError
+        with self.assertRaises((AttributeError, TypeError)):
             with mycontext():
                 pass
 
@@ -506,7 +507,8 @@ class TestContextDecorator(unittest.TestCase):
             def __uxit__(self, *exc):
                 pass
 
-        with self.assertRaises(AttributeError):
+        # 3.11+ raises TypeError, older versions raise AttributeError
+        with self.assertRaises((AttributeError, TypeError)):
             with mycontext():
                 pass
 
