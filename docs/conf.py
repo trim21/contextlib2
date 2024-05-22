@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'contextlib2'
-copyright = u'2021, Nick Coghlan'
+copyright = u'2024, Alyssa Coghlan'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -180,7 +180,7 @@ htmlhelp_basename = 'contextlib2doc'
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'contextlib2.tex', u'contextlib2 Documentation',
-   u'Nick Coghlan', 'manual'),
+   u'Alyssa Coghlan', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -213,7 +213,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'contextlib2', u'contextlib2 Documentation',
-     [u'Nick Coghlan'], 1)
+     [u'Alyssa Coghlan'], 1)
 ]
 
 
