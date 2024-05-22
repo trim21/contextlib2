@@ -8,7 +8,7 @@ from collections import deque
 from functools import wraps
 from types import MethodType
 
-# Python 3.6/3.7/3.8 compatibility: GenericAlias may not be defined
+# Python 3.7/3.8 compatibility: GenericAlias may not be defined
 try:
     from types import GenericAlias
 except ImportError:
@@ -23,8 +23,6 @@ __all__ = ["asynccontextmanager", "contextmanager", "closing", "nullcontext",
            "AsyncExitStack", "ContextDecorator", "ExitStack",
            "redirect_stdout", "redirect_stderr", "suppress", "aclosing"]
 
-# Backwards compatibility
-__all__ += ["ContextStack"]
 
 class AbstractContextManager(abc.ABC):
     """An abstract base class for context managers."""

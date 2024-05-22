@@ -1,6 +1,28 @@
 Release History
 ---------------
 
+24.6.0 (2024-06-??)
+^^^^^^^^^^^^^^^^^^^
+
+* Due to the use of positional-only argument syntax, the minimum supported
+  Python version is now Python 3.8.
+* Update ``mypy stubtest`` to work with recent mypy versions (mypy 1.8.0 tested)
+  (`#54 <https://github.com/jazzband/contextlib2/issues/54>`__)
+* The ``dev/mypy.allowlist`` file needed for the ``mypy stubtest`` step in the
+  ``tox`` test configuration is now included in the published sdist
+  (`#53 <https://github.com/jazzband/contextlib2/issues/53>`__)
+* Type hints have been updated to include ``nullcontext`` (3.10 API added in
+  21.6.0) (`#41 <https://github.com/jazzband/contextlib2/issues/41>`__)
+* Test suite updated to pass on Python 3.11 and 3.12 (21.6.0 works on these
+  versions, the test suite just failed due to no longer valid assumptions)
+  (`#51 <https://github.com/jazzband/contextlib2/issues/51>`__)
+* Updates to the default compatibility testing matrix:
+
+  * Added: CPython 3.11, CPython 3.12
+  * Dropped: CPython 3.6, CPython 3.7
+
+python -m mypy.stubtest --allowlist dev/mypy.allowlist contextlib2
+
 21.6.0 (2021-06-27)
 ^^^^^^^^^^^^^^^^^^^
 
