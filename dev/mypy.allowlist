@@ -1,3 +1,10 @@
 # Deprecated APIs that never graduated to the standard library
 contextlib2.ContextDecorator.refresh_cm
-contextlib2.ContextStack
+
+# stubcheck no longer complains about this one for some reason
+# (but it does complain about the unused allowlist entry)
+# contextlib2.ContextStack
+
+# mypy seems to be confused by the GenericAlias compatibility hack
+contextlib2.AbstractAsyncContextManager.__class_getitem__
+contextlib2.AbstractContextManager.__class_getitem__
