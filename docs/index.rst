@@ -55,7 +55,7 @@ PyPI page`_.
 There are no operating system or distribution specific versions of this
 module - it is a pure Python module that should work on all platforms.
 
-Supported Python versions are currently 3.7+.
+Supported Python versions are currently 3.8+.
 
 .. _Python Package Index: http://pypi.python.org
 .. _pip: http://www.pip-installer.org
