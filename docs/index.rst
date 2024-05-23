@@ -28,8 +28,8 @@ beta release cycle, there have been no subsequent changes to ``contextlib``)
 The module makes use of positional-only argument syntax in several call
 signatures, so the oldest supported Python version is Python 3.8.
 
-This module may also be used a proving ground for new features not yet part of
-the standard library. There are currently no such features in the module.
+This module may also be used as a proving ground for new features not yet part
+of the standard library. There are currently no such features in the module.
 
 Finally, this module contains some deprecated APIs which never graduated to
 standard library inclusion. These interfaces are no longer documented, but may
