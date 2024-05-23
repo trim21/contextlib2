@@ -1,3 +1,5 @@
+"""Unit tests for asynchronous features of contextlib2.py"""
+
 import asyncio
 from contextlib2 import (
     asynccontextmanager, AbstractAsyncContextManager,

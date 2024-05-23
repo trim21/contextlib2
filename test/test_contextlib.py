@@ -1,4 +1,4 @@
-"""Unit tests for contextlib.py, and other context managers."""
+"""Unit tests for synchronous features of contextlib2.py"""
 
 import io
 import os

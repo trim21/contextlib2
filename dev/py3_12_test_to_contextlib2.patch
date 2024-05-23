@@ -1,5 +1,11 @@
 --- /home/ncoghlan/devel/contextlib2/../cpython/Lib/test/test_contextlib.py	2024-05-23 11:57:09.276022441 +1000
-+++ /home/ncoghlan/devel/contextlib2/test/test_contextlib.py	2024-05-23 16:17:54.963869109 +1000
++++ /home/ncoghlan/devel/contextlib2/test/test_contextlib.py	2024-05-23 17:38:37.295232213 +1000
+@@ -1,4 +1,4 @@
+-"""Unit tests for contextlib.py, and other context managers."""
++"""Unit tests for synchronous features of contextlib2.py"""
+ 
+ import io
+ import os
 @@ -7,7 +7,7 @@
  import threading
  import traceback

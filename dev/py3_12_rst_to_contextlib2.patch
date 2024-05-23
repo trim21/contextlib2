@@ -1,5 +1,5 @@
 --- /home/ncoghlan/devel/contextlib2/../cpython/Doc/library/contextlib.rst	2024-05-20 12:53:59.936907756 +1000
-+++ /home/ncoghlan/devel/contextlib2/docs/contextlib2.rst	2024-05-23 16:52:15.696031500 +1000
++++ /home/ncoghlan/devel/contextlib2/docs/contextlib2.rst	2024-05-23 17:39:52.671083724 +1000
 @@ -1,20 +1,5 @@
 -:mod:`!contextlib` --- Utilities for :keyword:`!with`\ -statement contexts
 -==========================================================================
@@ -45,7 +45,22 @@
  
  .. decorator:: contextmanager
  
-@@ -95,9 +80,6 @@
+@@ -49,12 +34,12 @@
+ 
+    While many objects natively support use in with statements, sometimes a
+    resource needs to be managed that isn't a context manager in its own right,
+-   and doesn't implement a ``close()`` method for use with ``contextlib.closing``
++   and doesn't implement a ``close()`` method for use with ``contextlib2.closing``
+ 
+    An abstract example would be the following to ensure correct resource
+    management::
+ 
+-      from contextlib import contextmanager
++      from contextlib2 import contextmanager
+ 
+       @contextmanager
+       def managed_resource(*args, **kwds):
+@@ -95,13 +80,10 @@
     created by :func:`contextmanager` to meet the requirement that context
     managers support multiple invocations in order to be used as decorators).
  
@@ -55,7 +70,21 @@
  
  .. decorator:: asynccontextmanager
  
-@@ -126,7 +108,10 @@
+-   Similar to :func:`~contextlib.contextmanager`, but creates an
++   Similar to :func:`~contextlib2.contextmanager`, but creates an
+    :ref:`asynchronous context manager <async-context-managers>`.
+ 
+    This function is a :term:`decorator` that can be used to define a factory
+@@ -112,7 +94,7 @@
+ 
+    A simple example::
+ 
+-      from contextlib import asynccontextmanager
++      from contextlib2 import asynccontextmanager
+ 
+       @asynccontextmanager
+       async def get_connection():
+@@ -126,13 +108,16 @@
            async with get_connection() as conn:
                return conn.query('SELECT ...')
  
@@ -67,7 +96,14 @@
  
     Context managers defined with :func:`asynccontextmanager` can be used
     either as decorators or with :keyword:`async with` statements::
-@@ -151,10 +136,6 @@
+ 
+      import time
+-     from contextlib import asynccontextmanager
++     from contextlib2 import asynccontextmanager
+ 
+      @asynccontextmanager
+      async def timeit():
+@@ -151,17 +136,13 @@
     created by :func:`asynccontextmanager` to meet the requirement that context
     managers support multiple invocations in order to be used as decorators.
  
@@ -78,6 +114,41 @@
  
  .. function:: closing(thing)
  
+    Return a context manager that closes *thing* upon completion of the block.  This
+    is basically equivalent to::
+ 
+-      from contextlib import contextmanager
++      from contextlib2 import contextmanager
+ 
+       @contextmanager
+       def closing(thing):
+@@ -172,7 +153,7 @@
+ 
+    And lets you write code like this::
+ 
+-      from contextlib import closing
++      from contextlib2 import closing
+       from urllib.request import urlopen
+ 
+       with closing(urlopen('https://www.python.org')) as page:
+@@ -196,7 +177,7 @@
+    Return an async context manager that calls the ``aclose()`` method of *thing*
+    upon completion of the block.  This is basically equivalent to::
+ 
+-      from contextlib import asynccontextmanager
++      from contextlib2 import asynccontextmanager
+ 
+       @asynccontextmanager
+       async def aclosing(thing):
+@@ -209,7 +190,7 @@
+    generators when they happen to exit early by :keyword:`break` or an
+    exception.  For example::
+ 
+-      from contextlib import aclosing
++      from contextlib2 import aclosing
+ 
+       async with aclosing(my_generator()) as values:
+           async for value in values:
 @@ -221,7 +202,8 @@
     variables work as expected, and the exit code isn't run after the
     lifetime of some task it depends on).
@@ -88,6 +159,19 @@
  
  
  .. _simplifying-support-for-single-optional-context-managers:
+@@ -235,10 +217,10 @@
+       def myfunction(arg, ignore_exceptions=False):
+           if ignore_exceptions:
+               # Use suppress to ignore all exceptions.
+-              cm = contextlib.suppress(Exception)
++              cm = contextlib2.suppress(Exception)
+           else:
+               # Do not ignore any exceptions, cm has no effect.
+-              cm = contextlib.nullcontext()
++              cm = contextlib2.nullcontext()
+           with cm:
+               # Do something
+ 
 @@ -269,11 +251,11 @@
             async with cm as session:
                 # Send http requests with session
@@ -104,6 +188,15 @@
  
  
  .. function:: suppress(*exceptions)
+@@ -290,7 +272,7 @@
+ 
+    For example::
+ 
+-       from contextlib import suppress
++       from contextlib2 import suppress
+ 
+        with suppress(FileNotFoundError):
+            os.remove('somefile.tmp')
 @@ -314,13 +296,15 @@
  
     If the code within the :keyword:`!with` block raises a
@@ -125,7 +218,7 @@
  
  .. function:: redirect_stdout(new_target)
  
-@@ -359,7 +343,8 @@
+@@ -359,17 +343,19 @@
  
     This context manager is :ref:`reentrant <reentrant-cms>`.
  
@@ -135,7 +228,10 @@
  
  
  .. function:: redirect_stderr(new_target)
-@@ -369,7 +354,8 @@
+ 
+-   Similar to :func:`~contextlib.redirect_stdout` but redirecting
++   Similar to :func:`~contextlib2.redirect_stdout` but redirecting
+    :data:`sys.stderr` to another file or file-like object.
  
     This context manager is :ref:`reentrant <reentrant-cms>`.
  
@@ -155,6 +251,24 @@
  
  
  .. class:: ContextDecorator()
+@@ -402,7 +389,7 @@
+ 
+    Example of ``ContextDecorator``::
+ 
+-      from contextlib import ContextDecorator
++      from contextlib2 import ContextDecorator
+ 
+       class mycontext(ContextDecorator):
+           def __enter__(self):
+@@ -449,7 +436,7 @@
+    Existing context managers that already have a base class can be extended by
+    using ``ContextDecorator`` as a mixin class::
+ 
+-      from contextlib import ContextDecorator
++      from contextlib2 import ContextDecorator
+ 
+       class mycontext(ContextBaseClass, ContextDecorator):
+           def __enter__(self):
 @@ -464,8 +451,6 @@
        statements. If this is not the case, then the original construct with the
        explicit :keyword:`!with` statement inside the function should be used.
@@ -164,6 +278,15 @@
  
  .. class:: AsyncContextDecorator
  
+@@ -474,7 +459,7 @@
+    Example of ``AsyncContextDecorator``::
+ 
+       from asyncio import run
+-      from contextlib import AsyncContextDecorator
++      from contextlib2 import AsyncContextDecorator
+ 
+       class mycontext(AsyncContextDecorator):
+           async def __aenter__(self):
 @@ -505,7 +490,8 @@
        The bit in the middle
        Finishing
@@ -198,7 +321,14 @@
  
     .. method:: push(exit)
  
-@@ -632,9 +620,10 @@
+@@ -627,14 +615,16 @@
+    The :meth:`~ExitStack.close` method is not implemented; :meth:`aclose` must be used
+    instead.
+ 
+-   .. coroutinemethod:: enter_async_context(cm)
++   .. method:: enter_async_context(cm)
++      :async:
+ 
        Similar to :meth:`ExitStack.enter_context` but expects an asynchronous context
        manager.
  
@@ -212,7 +342,17 @@
  
     .. method:: push_async_exit(exit)
  
-@@ -658,7 +647,9 @@
+@@ -645,7 +635,8 @@
+ 
+       Similar to :meth:`ExitStack.callback` but expects a coroutine function.
+ 
+-   .. coroutinemethod:: aclose()
++   .. method:: aclose()
++      :async:
+ 
+       Similar to :meth:`ExitStack.close` but properly handles awaitables.
+ 
+@@ -658,13 +649,15 @@
            # the async with statement, even if attempts to open a connection
            # later in the list raise an exception.
  
@@ -223,3 +363,91 @@
  
  Examples and Recipes
  --------------------
+ 
+ This section describes some examples and recipes for making effective use of
+-the tools provided by :mod:`contextlib`.
++the tools provided by :mod:`contextlib2`.
+ 
+ 
+ Supporting a variable number of context managers
+@@ -728,7 +721,7 @@
+ acquisition and release functions, along with an optional validation function,
+ and maps them to the context management protocol::
+ 
+-   from contextlib import contextmanager, AbstractContextManager, ExitStack
++   from contextlib2 import contextmanager, AbstractContextManager, ExitStack
+ 
+    class ResourceManager(AbstractContextManager):
+ 
+@@ -788,7 +781,7 @@
+ execution at the end of a ``with`` statement, and then later decide to skip
+ executing that callback::
+ 
+-   from contextlib import ExitStack
++   from contextlib2 import ExitStack
+ 
+    with ExitStack() as stack:
+        stack.callback(cleanup_resources)
+@@ -802,7 +795,7 @@
+ If a particular application uses this pattern a lot, it can be simplified
+ even further by means of a small helper class::
+ 
+-   from contextlib import ExitStack
++   from contextlib2 import ExitStack
+ 
+    class Callback(ExitStack):
+        def __init__(self, callback, /, *args, **kwds):
+@@ -822,7 +815,7 @@
+ :meth:`ExitStack.callback` to declare the resource cleanup in
+ advance::
+ 
+-   from contextlib import ExitStack
++   from contextlib2 import ExitStack
+ 
+    with ExitStack() as stack:
+        @stack.callback
+@@ -849,7 +842,7 @@
+ inheriting from :class:`ContextDecorator` provides both capabilities in a
+ single definition::
+ 
+-    from contextlib import ContextDecorator
++    from contextlib2 import ContextDecorator
+     import logging
+ 
+     logging.basicConfig(level=logging.INFO)
+@@ -911,7 +904,7 @@
+ context managers, and will complain about the underlying generator failing
+ to yield if an attempt is made to use them a second time::
+ 
+-    >>> from contextlib import contextmanager
++    >>> from contextlib2 import contextmanager
+     >>> @contextmanager
+     ... def singleuse():
+     ...     print("Before")
+@@ -946,7 +939,7 @@
+ :func:`suppress`, :func:`redirect_stdout`, and :func:`chdir`. Here's a very
+ simple example of reentrant use::
+ 
+-    >>> from contextlib import redirect_stdout
++    >>> from contextlib2 import redirect_stdout
+     >>> from io import StringIO
+     >>> stream = StringIO()
+     >>> write_to_stream = redirect_stdout(stream)
+@@ -992,7 +985,7 @@
+ when leaving any with statement, regardless of where those callbacks
+ were added::
+ 
+-    >>> from contextlib import ExitStack
++    >>> from contextlib2 import ExitStack
+     >>> stack = ExitStack()
+     >>> with stack:
+     ...     stack.callback(print, "Callback: from first context")
+@@ -1026,7 +1019,7 @@
+ Using separate :class:`ExitStack` instances instead of reusing a single
+ instance avoids that problem::
+ 
+-    >>> from contextlib import ExitStack
++    >>> from contextlib2 import ExitStack
+     >>> with ExitStack() as outer_stack:
+     ...     outer_stack.callback(print, "Callback: from outer context")
+     ...     with ExitStack() as inner_stack:

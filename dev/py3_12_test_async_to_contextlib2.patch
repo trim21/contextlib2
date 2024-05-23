@@ -1,13 +1,15 @@
 --- /home/ncoghlan/devel/contextlib2/../cpython/Lib/test/test_contextlib_async.py	2024-05-23 11:57:09.276022441 +1000
-+++ /home/ncoghlan/devel/contextlib2/test/test_contextlib_async.py	2024-05-23 16:17:45.220019904 +1000
-@@ -1,5 +1,5 @@
++++ /home/ncoghlan/devel/contextlib2/test/test_contextlib_async.py	2024-05-23 17:39:05.799797895 +1000
+@@ -1,5 +1,7 @@
++"""Unit tests for asynchronous features of contextlib2.py"""
++
  import asyncio
 -from contextlib import (
 +from contextlib2 import (
      asynccontextmanager, AbstractAsyncContextManager,
      AsyncExitStack, nullcontext, aclosing, contextmanager)
  import functools
-@@ -7,7 +7,7 @@
+@@ -7,7 +9,7 @@
  import unittest
  import traceback
  
@@ -16,7 +18,7 @@
  
  support.requires_working_socket(module=True)
  
-@@ -202,7 +202,8 @@
+@@ -202,7 +204,8 @@
              await ctx.__aexit__(TypeError, TypeError('foo'), None)
          if support.check_impl_detail(cpython=True):
              # The "gen" attribute is an implementation detail.
@@ -26,7 +28,7 @@
  
      @_async_test
      async def test_contextmanager_trap_no_yield(self):
-@@ -226,7 +227,8 @@
+@@ -226,7 +229,8 @@
              await ctx.__aexit__(None, None, None)
          if support.check_impl_detail(cpython=True):
              # The "gen" attribute is an implementation detail.
@@ -36,7 +38,7 @@
  
      @_async_test
      async def test_contextmanager_non_normalised(self):
-@@ -669,12 +671,13 @@
+@@ -669,12 +673,13 @@
              async def __aenter__(self):
                  pass
  
@@ -53,7 +55,7 @@
                  await stack.enter_async_context(LacksExit())
              self.assertFalse(stack._exit_callbacks)
  
-@@ -752,7 +755,8 @@
+@@ -752,7 +757,8 @@
          cm.__aenter__ = object()
          cm.__aexit__ = object()
          stack = self.exit_stack()
