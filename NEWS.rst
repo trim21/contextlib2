@@ -4,8 +4,22 @@ Release History
 24.6.0 (2024-06-??)
 ^^^^^^^^^^^^^^^^^^^
 
-* Due to the use of positional-only argument syntax, the minimum supported
+* To allow the use of positional-only argument syntax, the minimum supported
   Python version is now Python 3.8.
+* Synchronised with the Python 3.12.3 (and 3.13.0) version of contextlib
+  (`#12 <https://github.com/jazzband/contextlib2/issues/12>`__), making the
+  following new features available on Python 3.8+:
+
+  * :class:`chdir` (added in Python 3.11)
+  * :func:`suppress` filters the contents of ``BaseExceptionGroup`` (Python 3.12)
+  * improved handling of :class:`StopIteration` subclasses (Python 3.11)
+* The exception thrown by :meth:`ExitStack.enter_context` and
+  :meth:`AsyncExitStack.enter_async_context` when the given object does not
+  implement the relevant context management protocol is now version-dependent
+  (:class:`TypeError` on 3.11+, :class:`AttributeError` on earlier versions).
+  This provides consistency with the ``with`` and ``async with`` behaviour on
+  the corresponding versions.
+* No longer needed object references are now released more promptly
 * Update ``mypy stubtest`` to work with recent mypy versions (mypy 1.8.0 tested)
   (`#54 <https://github.com/jazzband/contextlib2/issues/54>`__)
 * The ``dev/mypy.allowlist`` file needed for the ``mypy stubtest`` step in the

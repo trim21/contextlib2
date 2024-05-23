@@ -1,5 +1,5 @@
---- ../cpython/Doc/library/contextlib.rst	2021-06-26 18:31:45.179532455 +1000
-+++ docs/contextlib2.rst	2021-06-26 21:19:00.172517765 +1000
+--- /home/ncoghlan/devel/contextlib2/../cpython/Doc/library/contextlib.rst	2024-05-20 12:53:59.936907756 +1000
++++ /home/ncoghlan/devel/contextlib2/docs/contextlib2.rst	2024-05-23 16:52:15.696031500 +1000
 @@ -1,20 +1,5 @@
 -:mod:`!contextlib` --- Utilities for :keyword:`!with`\ -statement contexts
 -==========================================================================
@@ -45,7 +45,7 @@
  
  .. decorator:: contextmanager
  
-@@ -93,9 +78,6 @@
+@@ -95,9 +80,6 @@
     created by :func:`contextmanager` to meet the requirement that context
     managers support multiple invocations in order to be used as decorators).
  
@@ -55,7 +55,7 @@
  
  .. decorator:: asynccontextmanager
  
-@@ -124,7 +106,10 @@
+@@ -126,7 +108,10 @@
            async with get_connection() as conn:
                return conn.query('SELECT ...')
  
@@ -67,7 +67,7 @@
  
     Context managers defined with :func:`asynccontextmanager` can be used
     either as decorators or with :keyword:`async with` statements::
-@@ -147,10 +132,6 @@
+@@ -151,10 +136,6 @@
     created by :func:`asynccontextmanager` to meet the requirement that context
     managers support multiple invocations in order to be used as decorators.
  
@@ -78,7 +78,7 @@
  
  .. function:: closing(thing)
  
-@@ -209,7 +190,8 @@
+@@ -221,7 +202,8 @@
     variables work as expected, and the exit code isn't run after the
     lifetime of some task it depends on).
  
@@ -88,9 +88,9 @@
  
  
  .. _simplifying-support-for-single-optional-context-managers:
-@@ -257,11 +239,11 @@
-           async with cm as session:
-               # Send http requests with session
+@@ -269,11 +251,11 @@
+            async with cm as session:
+                # Send http requests with session
  
 -   .. versionadded:: 3.7
 -
@@ -104,17 +104,28 @@
  
  
  .. function:: suppress(*exceptions)
-@@ -300,7 +282,8 @@
+@@ -314,13 +296,15 @@
  
-    This context manager is :ref:`reentrant <reentrant-cms>`.
+    If the code within the :keyword:`!with` block raises a
+    :exc:`BaseExceptionGroup`, suppressed exceptions are removed from the
+-   group.  If any exceptions in the group are not suppressed, a group containing them is re-raised.
++   group.  If any exceptions in the group are not suppressed, a group containing
++   them is re-raised.
  
 -   .. versionadded:: 3.4
 +   .. versionadded:: 0.5
 +      Part of the standard library in Python 3.4 and later
  
+-   .. versionchanged:: 3.12
+-      ``suppress`` now supports suppressing exceptions raised as
+-      part of an :exc:`BaseExceptionGroup`.
++   .. versionchanged:: 24.6.0
++      Updated to Python 3.12 version that supports suppressing exceptions raised
++      as part of a :exc:`BaseExceptionGroup`.
  
  .. function:: redirect_stdout(new_target)
-@@ -340,7 +323,8 @@
+ 
+@@ -359,7 +343,8 @@
  
     This context manager is :ref:`reentrant <reentrant-cms>`.
  
@@ -124,7 +135,7 @@
  
  
  .. function:: redirect_stderr(new_target)
-@@ -350,7 +334,8 @@
+@@ -369,7 +354,8 @@
  
     This context manager is :ref:`reentrant <reentrant-cms>`.
  
@@ -133,8 +144,18 @@
 +      Part of the standard library in Python 3.5 and later
  
  
+ .. function:: chdir(path)
+@@ -386,7 +372,8 @@
+ 
+    This context manager is :ref:`reentrant <reentrant-cms>`.
+ 
+-   .. versionadded:: 3.11
++   .. versionadded:: 24.6.0
++      Part of the standard library in Python 3.11 and later
+ 
+ 
  .. class:: ContextDecorator()
-@@ -426,8 +411,6 @@
+@@ -464,8 +451,6 @@
        statements. If this is not the case, then the original construct with the
        explicit :keyword:`!with` statement inside the function should be used.
  
@@ -143,7 +164,7 @@
  
  .. class:: AsyncContextDecorator
  
-@@ -465,7 +448,8 @@
+@@ -505,7 +490,8 @@
        The bit in the middle
        Finishing
  
@@ -153,7 +174,7 @@
  
  
  .. class:: ExitStack()
-@@ -504,7 +488,8 @@
+@@ -547,7 +533,8 @@
     foundation for higher level context managers that manipulate the exit
     stack in application specific ways.
  
@@ -163,25 +184,35 @@
  
     .. method:: enter_context(cm)
  
-@@ -580,7 +565,7 @@
-    The :meth:`close` method is not implemented, :meth:`aclose` must be used
-    instead.
+@@ -558,9 +545,10 @@
+       These context managers may suppress exceptions just as they normally
+       would if used directly as part of a :keyword:`with` statement.
  
--   .. coroutinemethod:: enter_async_context(cm)
-+   .. method:: enter_async_context(cm)
+-      .. versionchanged:: 3.11
+-         Raises :exc:`TypeError` instead of :exc:`AttributeError` if *cm*
+-         is not a context manager.
++      .. versionchanged:: 24.6.0
++         When running on Python 3.11 or later, raises :exc:`TypeError` instead
++         of :exc:`AttributeError` if *cm* is not a context manager. This aligns
++         with the behaviour of :keyword:`with` statements in Python 3.11+.
  
-       Similar to :meth:`enter_context` but expects an asynchronous context
+    .. method:: push(exit)
+ 
+@@ -632,9 +620,10 @@
+       Similar to :meth:`ExitStack.enter_context` but expects an asynchronous context
        manager.
-@@ -594,7 +579,7 @@
  
-       Similar to :meth:`callback` but expects a coroutine function.
+-      .. versionchanged:: 3.11
+-         Raises :exc:`TypeError` instead of :exc:`AttributeError` if *cm*
+-         is not an asynchronous context manager.
++      .. versionchanged:: 24.6.0
++         When running on Python 3.11 or later, raises :exc:`TypeError` instead
++         of :exc:`AttributeError` if *cm* is not an asynchronous context manager.
++         This aligns with the behaviour of ``async with`` statements in Python 3.11+.
  
--   .. coroutinemethod:: aclose()
-+   .. method:: aclose()
+    .. method:: push_async_exit(exit)
  
-       Similar to :meth:`close` but properly handles awaitables.
- 
-@@ -607,7 +592,9 @@
+@@ -658,7 +647,9 @@
            # the async with statement, even if attempts to open a connection
            # later in the list raise an exception.
  

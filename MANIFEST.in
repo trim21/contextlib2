@@ -1,5 +1,5 @@
-include *.py *.cfg *.txt *.rst *.md *.ini MANIFEST.in dev/mypy.allowlist
+include *.py *.cfg *.txt *.rst *.md *.ini MANIFEST.in
 recursive-include contextlib2 *.py *.pyi py.typed
 recursive-include docs *.rst *.py make.bat Makefile
 recursive-include test *.py
-recursive-include dev *.patch
+recursive-include dev *.patch *.allowlist *.sh
