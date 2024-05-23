@@ -615,7 +615,7 @@ Functions and classes provided:
    The :meth:`~ExitStack.close` method is not implemented; :meth:`aclose` must be used
    instead.
 
-   .. coroutinemethod:: enter_async_context(cm)
+   .. method:: enter_async_context(cm)
 
       Similar to :meth:`ExitStack.enter_context` but expects an asynchronous context
       manager.
@@ -634,7 +634,7 @@ Functions and classes provided:
 
       Similar to :meth:`ExitStack.callback` but expects a coroutine function.
 
-   .. coroutinemethod:: aclose()
+   .. method:: aclose()
 
       Similar to :meth:`ExitStack.close` but properly handles awaitables.
 
