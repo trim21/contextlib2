@@ -16,11 +16,6 @@ cl2_check_traceback_details = (_py_ver >= (3, 10))
 
 # CM protocol checking switched to TypeError in Python 3.11
 cl2_cm_api_exc_type = TypeError if (_py_ver >= (3, 11)) else AttributeError
-cl2_cm_api_exc_text_legacy = {
-    "": "has no attribute",
-    "__enter__": "__enter__",
-    "__exit__": "__exit__",
-}
 if cl2_cm_api_exc_type is AttributeError:
     cl2_cm_api_exc_text_sync = {
         "": "has no attribute",
