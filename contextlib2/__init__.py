@@ -114,6 +114,7 @@ class ContextDecorator(object):
         DEPRECATED: refresh_cm was never added to the standard library's
                     ContextDecorator API
         """
+        import warnings # Only import if needed for the deprecation warning
         warnings.warn("refresh_cm was never added to the standard library",
                       DeprecationWarning)
         return self._recreate_cm()
@@ -857,7 +858,7 @@ class chdir(AbstractContextManager):
 
 # Preserve backwards compatibility
 class ContextStack(ExitStack):
-    """Backwards compatibility alias for ExitStack"""
+    """(DEPRECATED) Backwards compatibility alias for ExitStack"""
 
     def __init__(self):
         import warnings # Only import if needed for the deprecation warning
