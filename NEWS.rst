@@ -35,8 +35,6 @@ Release History
   * Added: CPython 3.11, CPython 3.12
   * Dropped: CPython 3.6, CPython 3.7
 
-python -m mypy.stubtest --allowlist dev/mypy.allowlist contextlib2
-
 21.6.0 (2021-06-27)
 ^^^^^^^^^^^^^^^^^^^
 
