@@ -11,3 +11,7 @@ MANIFEST
 .coverage
 coverage.xml
 htmlcov/
+
+# Patching output files
+*.orig
+*.rej

@@ -34,7 +34,7 @@ The one exception is the included type hints file, which comes from the
 Development
 -----------
 
-contextlib2 has no runtime dependencies, but requires ``setuptools`` and
+``contextlib2`` has no runtime dependencies, but requires ``setuptools`` and
 ``wheel`` at build time to generate universal wheel archives.
 
 Local testing is a matter of running::
@@ -49,20 +49,20 @@ You can test against multiple versions of Python with
 
 Versions currently tested in both tox and GitHub Actions are:
 
-* CPython 3.6
-* CPython 3.7
 * CPython 3.8
 * CPython 3.9
 * CPython 3.10
-* PyPy3
+* CPython 3.11
+* CPython 3.12
+* PyPy3 (specifically 3.10 in GitHub Actions)
 
 Updating to a new stdlib reference version
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As of Python 3.10, 4 files needed to be copied from the CPython reference
+As of Python 3.12.3, 4 files needed to be copied from the CPython reference
 implementation to contextlib2:
 
-* ``Doc/contextlib.rst`` -> ``docs/contextlib2.rst``
+* ``Doc/library/contextlib.rst`` -> ``docs/contextlib2.rst``
 * ``Lib/contextlib.py`` -> ``contextlib2/__init__.py``
 * ``Lib/test/test_contextlib.py`` -> ``test/test_contextlib.py``
 * ``Lib/test/test_contextlib_async.py`` -> ``test/test_contextlib_async.py``
@@ -72,19 +72,31 @@ retrieved from the ``typeshed`` project::
 
     wget https://raw.githubusercontent.com/python/typeshed/master/stdlib/contextlib.pyi
 
-For the 3.10 sync, the only changes needed to the test files were to import from
-``contextlib2`` rather than ``contextlib``. The test directory is laid out so
-that the test suite's imports from ``test.support`` work the same way they do in
-the main CPython test suite.
-
 The following patch files are saved in the ``dev`` directory:
 
-* changes made to ``contextlib2/__init__.py`` to get it to run on the older
+* changes to ``contextlib2/__init__.py`` to get it to run on the older
   versions (and to add back in the deprecated APIs that never graduated to
   the standard library version)
-* changes made to ``contextlib2/__init__.pyi`` to make the Python version
+* changes to ``test/test_contextlib.py`` and ``test/test_contextlib_async.py``
+  to get them to run on the older versions
+* changes to ``contextlib2/__init__.pyi`` to make the Python version
   guards unconditional (since the ``contextlib2`` API is the same on all
   supported versions)
-* changes made to ``docs/contextlib2.rst`` to use ``contextlib2`` version
+* changes to ``docs/contextlib2.rst`` to use ``contextlib2`` version
   numbers in the version added/changed notes and to integrate the module
   documentation with the rest of the project documentation
+
+When the upstream changes between releases are minor, these patch files may be
+used directly to reapply the ``contextlib2`` specific changes after syncing a
+new version. Even when the patches do not apply cleanly, they're still a useful
+guide as to the changes that are needed to restore compatibility with older
+Python versions and make any other ``contextlib2`` specific updates.
+
+The test directory is laid out so that the test suite's imports from
+``test.support`` work the same way as they do in the main CPython test suite.
+These files are selective copies rather than complete ones as the ``contextlib``
+tests only need a tiny fraction of the features available in the real
+``test.support`` module.
+
+The ``dev/sync_from_cpython.sh`` and ``dev/save_diff_snapshot.sh`` scripts
+automate some of the steps in the sync process.

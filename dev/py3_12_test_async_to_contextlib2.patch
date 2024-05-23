@@ -1,0 +1,67 @@
+--- /home/ncoghlan/devel/contextlib2/../cpython/Lib/test/test_contextlib_async.py	2024-05-23 11:57:09.276022441 +1000
++++ /home/ncoghlan/devel/contextlib2/test/test_contextlib_async.py	2024-05-23 17:39:05.799797895 +1000
+@@ -1,5 +1,7 @@
++"""Unit tests for asynchronous features of contextlib2.py"""
++
+ import asyncio
+-from contextlib import (
++from contextlib2 import (
+     asynccontextmanager, AbstractAsyncContextManager,
+     AsyncExitStack, nullcontext, aclosing, contextmanager)
+ import functools
+@@ -7,7 +9,7 @@
+ import unittest
+ import traceback
+ 
+-from test.test_contextlib import TestBaseExitStack
++from .test_contextlib import TestBaseExitStack
+ 
+ support.requires_working_socket(module=True)
+ 
+@@ -202,7 +204,8 @@
+             await ctx.__aexit__(TypeError, TypeError('foo'), None)
+         if support.check_impl_detail(cpython=True):
+             # The "gen" attribute is an implementation detail.
+-            self.assertFalse(ctx.gen.ag_suspended)
++            if support.cl2_async_gens_have_ag_suspended:
++                self.assertFalse(ctx.gen.ag_suspended)
+ 
+     @_async_test
+     async def test_contextmanager_trap_no_yield(self):
+@@ -226,7 +229,8 @@
+             await ctx.__aexit__(None, None, None)
+         if support.check_impl_detail(cpython=True):
+             # The "gen" attribute is an implementation detail.
+-            self.assertFalse(ctx.gen.ag_suspended)
++            if support.cl2_async_gens_have_ag_suspended:
++                self.assertFalse(ctx.gen.ag_suspended)
+ 
+     @_async_test
+     async def test_contextmanager_non_normalised(self):
+@@ -669,12 +673,13 @@
+             async def __aenter__(self):
+                 pass
+ 
++        expected_error, expected_text = support.cl2_cm_api_exc_info_async()
+         async with self.exit_stack() as stack:
+-            with self.assertRaisesRegex(TypeError, 'asynchronous context manager'):
++            with self.assertRaisesRegex(expected_error, expected_text):
+                 await stack.enter_async_context(LacksEnterAndExit())
+-            with self.assertRaisesRegex(TypeError, 'asynchronous context manager'):
++            with self.assertRaisesRegex(expected_error, expected_text):
+                 await stack.enter_async_context(LacksEnter())
+-            with self.assertRaisesRegex(TypeError, 'asynchronous context manager'):
++            with self.assertRaisesRegex(expected_error, expected_text):
+                 await stack.enter_async_context(LacksExit())
+             self.assertFalse(stack._exit_callbacks)
+ 
+@@ -752,7 +757,8 @@
+         cm.__aenter__ = object()
+         cm.__aexit__ = object()
+         stack = self.exit_stack()
+-        with self.assertRaisesRegex(TypeError, 'asynchronous context manager'):
++        expected_error, expected_text = support.cl2_cm_api_exc_info_async()
++        with self.assertRaisesRegex(expected_error, expected_text):
+             await stack.enter_async_context(cm)
+         stack.push_async_exit(cm)
+         self.assertIs(stack._exit_callbacks[-1][1], cm)

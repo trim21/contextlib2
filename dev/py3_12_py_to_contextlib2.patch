@@ -1,0 +1,116 @@
+--- /home/ncoghlan/devel/contextlib2/../cpython/Lib/contextlib.py	2024-05-23 11:57:09.210023505 +1000
++++ /home/ncoghlan/devel/contextlib2/contextlib2/__init__.py	2024-05-23 17:05:06.549142813 +1000
+@@ -5,7 +5,46 @@
+ import _collections_abc
+ from collections import deque
+ from functools import wraps
+-from types import MethodType, GenericAlias
++from types import MethodType
++
++# Python 3.8 compatibility: GenericAlias may not be defined
++try:
++    from types import GenericAlias
++except ImportError:
++    # If the real GenericAlias type doesn't exist, __class_getitem__ won't be used,
++    # so the fallback placeholder doesn't need to provide any meaningful behaviour
++    # (typecheckers may still be unhappy, but for that problem the answer is
++    # "use a newer Python version with better typechecking support")
++    class GenericAlias:
++        pass
++
++# Python 3.10 and earlier compatibility: BaseExceptionGroup may not be defined
++try:
++    BaseExceptionGroup
++except NameError:
++    # If the real BaseExceptionGroup type doesn't exist, it will never actually
++    # be raised. This means the fallback placeholder doesn't need to provide
++    # any meaningful behaviour, it just needs to be compatible with 'issubclass'
++    class BaseExceptionGroup(BaseException):
++        pass
++
++# Python 3.9 and earlier compatibility: anext may not be defined
++try:
++    anext
++except NameError:
++    def anext(obj, /):
++        return obj.__anext__()
++
++# Python 3.11+ behaviour consistency: replace AttributeError with TypeError
++if sys.version_info >= (3, 11):
++    # enter_context() and enter_async_context() follow the change in the
++    # exception type raised by with statements and async with statements
++    _CL2_ERROR_TO_CONVERT = AttributeError
++else:
++    # On older versions, raise AttributeError without any changes
++    class _CL2_ERROR_TO_CONVERT(Exception):
++        pass
++
+ 
+ __all__ = ["asynccontextmanager", "contextmanager", "closing", "nullcontext",
+            "AbstractContextManager", "AbstractAsyncContextManager",
+@@ -62,6 +101,24 @@
+ class ContextDecorator(object):
+     "A base class or mixin that enables context managers to work as decorators."
+ 
++    def refresh_cm(self):
++        """Returns the context manager used to actually wrap the call to the
++        decorated function.
++
++        The default implementation just returns *self*.
++
++        Overriding this method allows otherwise one-shot context managers
++        like _GeneratorContextManager to support use as decorators via
++        implicit recreation.
++
++        DEPRECATED: refresh_cm was never added to the standard library's
++                    ContextDecorator API
++        """
++        import warnings # Only import if needed for the deprecation warning
++        warnings.warn("refresh_cm was never added to the standard library",
++                      DeprecationWarning)
++        return self._recreate_cm()
++
+     def _recreate_cm(self):
+         """Return a recreated instance of self.
+ 
+@@ -520,7 +577,7 @@
+         try:
+             _enter = cls.__enter__
+             _exit = cls.__exit__
+-        except AttributeError:
++        except _CL2_ERROR_TO_CONVERT:
+             raise TypeError(f"'{cls.__module__}.{cls.__qualname__}' object does "
+                             f"not support the context manager protocol") from None
+         result = _enter(cm)
+@@ -652,7 +709,7 @@
+         try:
+             _enter = cls.__aenter__
+             _exit = cls.__aexit__
+-        except AttributeError:
++        except _CL2_ERROR_TO_CONVERT:
+             raise TypeError(f"'{cls.__module__}.{cls.__qualname__}' object does "
+                             f"not support the asynchronous context manager protocol"
+                            ) from None
+@@ -798,3 +855,22 @@
+ 
+     def __exit__(self, *excinfo):
+         os.chdir(self._old_cwd.pop())
++
++# Preserve backwards compatibility
++class ContextStack(ExitStack):
++    """(DEPRECATED) Backwards compatibility alias for ExitStack"""
++
++    def __init__(self):
++        import warnings # Only import if needed for the deprecation warning
++        warnings.warn("ContextStack has been renamed to ExitStack",
++                      DeprecationWarning)
++        super(ContextStack, self).__init__()
++
++    def register_exit(self, callback):
++        return self.push(callback)
++
++    def register(self, callback, *args, **kwds):
++        return self.callback(callback, *args, **kwds)
++
++    def preserve(self):
++        return self.pop_all()

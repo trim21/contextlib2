@@ -1,0 +1,106 @@
+--- /home/ncoghlan/devel/contextlib2/../cpython/Lib/test/test_contextlib.py	2024-05-23 11:57:09.276022441 +1000
++++ /home/ncoghlan/devel/contextlib2/test/test_contextlib.py	2024-05-23 17:38:37.295232213 +1000
+@@ -1,4 +1,4 @@
+-"""Unit tests for contextlib.py, and other context managers."""
++"""Unit tests for synchronous features of contextlib2.py"""
+ 
+ import io
+ import os
+@@ -7,7 +7,7 @@
+ import threading
+ import traceback
+ import unittest
+-from contextlib import *  # Tests __all__
++from contextlib2 import *  # Tests __all__
+ from test import support
+ from test.support import os_helper
+ from test.support.testcase import ExceptionIsLikeMixin
+@@ -161,7 +161,8 @@
+             ctx.__exit__(TypeError, TypeError("foo"), None)
+         if support.check_impl_detail(cpython=True):
+             # The "gen" attribute is an implementation detail.
+-            self.assertFalse(ctx.gen.gi_suspended)
++            if support.cl2_gens_have_gi_suspended:
++                self.assertFalse(ctx.gen.gi_suspended)
+ 
+     def test_contextmanager_trap_no_yield(self):
+         @contextmanager
+@@ -183,7 +184,8 @@
+             ctx.__exit__(None, None, None)
+         if support.check_impl_detail(cpython=True):
+             # The "gen" attribute is an implementation detail.
+-            self.assertFalse(ctx.gen.gi_suspended)
++            if support.cl2_gens_have_gi_suspended:
++                self.assertFalse(ctx.gen.gi_suspended)
+ 
+     def test_contextmanager_non_normalised(self):
+         @contextmanager
+@@ -610,7 +612,8 @@
+             def __exit__(self, *exc):
+                 pass
+ 
+-        with self.assertRaisesRegex(TypeError, 'the context manager'):
++        expected_error, expected_text = support.cl2_cm_api_exc_info_sync("__enter__")
++        with self.assertRaisesRegex(expected_error, expected_text):
+             with mycontext():
+                 pass
+ 
+@@ -622,7 +625,8 @@
+             def __uxit__(self, *exc):
+                 pass
+ 
+-        with self.assertRaisesRegex(TypeError, 'the context manager.*__exit__'):
++        expected_error, expected_text = support.cl2_cm_api_exc_info_sync("__exit__")
++        with self.assertRaisesRegex(expected_error, expected_text):
+             with mycontext():
+                 pass
+ 
+@@ -790,12 +794,13 @@
+             def __enter__(self):
+                 pass
+ 
++        expected_error, expected_text = support.cl2_cm_api_exc_info_sync()
+         with self.exit_stack() as stack:
+-            with self.assertRaisesRegex(TypeError, 'the context manager'):
++            with self.assertRaisesRegex(expected_error, expected_text):
+                 stack.enter_context(LacksEnterAndExit())
+-            with self.assertRaisesRegex(TypeError, 'the context manager'):
++            with self.assertRaisesRegex(expected_error, expected_text):
+                 stack.enter_context(LacksEnter())
+-            with self.assertRaisesRegex(TypeError, 'the context manager'):
++            with self.assertRaisesRegex(expected_error, expected_text):
+                 stack.enter_context(LacksExit())
+             self.assertFalse(stack._exit_callbacks)
+ 
+@@ -858,8 +863,11 @@
+             [('_exit_wrapper', 'callback(*args, **kwds)'),
+              ('raise_exc', 'raise exc')]
+ 
+-        self.assertEqual(
+-            [(f.name, f.line) for f in ve_frames], expected)
++        # This check fails on PyPy 3.10
++        # It also fails on CPython 3.9 and earlier versions
++        if support.check_impl_detail(cpython=True) and support.cl2_check_traceback_details:
++            self.assertEqual(
++                [(f.name, f.line) for f in ve_frames], expected)
+ 
+         self.assertIsInstance(exc.__context__, ZeroDivisionError)
+         zde_frames = traceback.extract_tb(exc.__context__.__traceback__)
+@@ -1093,7 +1101,8 @@
+         cm.__enter__ = object()
+         cm.__exit__ = object()
+         stack = self.exit_stack()
+-        with self.assertRaisesRegex(TypeError, 'the context manager'):
++        expected_error, expected_text = support.cl2_cm_api_exc_info_sync()
++        with self.assertRaisesRegex(expected_error, expected_text):
+             stack.enter_context(cm)
+         stack.push(cm)
+         self.assertIs(stack._exit_callbacks[-1][1], cm)
+@@ -1264,6 +1273,7 @@
+             1/0
+         self.assertTrue(outer_continued)
+ 
++    @support.cl2_requires_exception_groups
+     def test_exception_groups(self):
+         eg_ve = lambda: ExceptionGroup(
+             "EG with ValueErrors only",

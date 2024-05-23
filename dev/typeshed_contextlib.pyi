@@ -1,20 +1,3 @@
-# Type hints copied from the typeshed project under the Apache License 2.0
-# https://github.com/python/typeshed/blob/64c85cdd449ccaff90b546676220c9ecfa6e697f/LICENSE
-
-# For updates: https://github.com/python/typeshed/blob/main/stdlib/contextlib.pyi
-
-# Last updated: 2024-05-22
-# Updated from: https://github.com/python/typeshed/blob/aa2d33df211e1e4f70883388febf750ac524d2bb/stdlib/contextlib.pyi
-# Saved to: dev/typeshed_contextlib.pyi
-
-# contextlib2 API adaptation notes:
-# * the various 'if True:' guards replace sys.version checks in the original
-#   typeshed file (those APIs are available on all supported versions)
-# * any commented out 'if True:' guards replace sys.version checks in the original
-#   typeshed file where the affected APIs haven't been backported yet
-# * deliberately omitted APIs are listed in `dev/mypy.allowlist`
-#   (e.g. deprecated experimental APIs that never graduated to the stdlib)
-
 import abc
 import sys
 from _typeshed import FileDescriptorOrPath, Unused
@@ -39,10 +22,10 @@ __all__ = [
     "nullcontext",
 ]
 
-if True:
+if sys.version_info >= (3, 10):
     __all__ += ["aclosing"]
 
-if True:
+if sys.version_info >= (3, 11):
     __all__ += ["chdir"]
 
 _T = TypeVar("_T")
@@ -82,14 +65,18 @@ class _GeneratorContextManager(AbstractContextManager[_T_co, bool | None], Conte
     func: Callable[..., Generator[_T_co, Any, Any]]
     args: tuple[Any, ...]
     kwds: dict[str, Any]
-    if True:
+    if sys.version_info >= (3, 9):
         def __exit__(
             self, typ: type[BaseException] | None, value: BaseException | None, traceback: TracebackType | None
+        ) -> bool | None: ...
+    else:
+        def __exit__(
+            self, type: type[BaseException] | None, value: BaseException | None, traceback: TracebackType | None
         ) -> bool | None: ...
 
 def contextmanager(func: Callable[_P, Iterator[_T_co]]) -> Callable[_P, _GeneratorContextManager[_T_co]]: ...
 
-if True:
+if sys.version_info >= (3, 10):
     _AF = TypeVar("_AF", bound=Callable[..., Awaitable[Any]])
 
     class AsyncContextDecorator:
@@ -98,6 +85,17 @@ if True:
     class _AsyncGeneratorContextManager(AbstractAsyncContextManager[_T_co, bool | None], AsyncContextDecorator):
         # __init__ and these attributes are actually defined in the base class _GeneratorContextManagerBase,
         # which is more trouble than it's worth to include in the stub (see #6676)
+        def __init__(self, func: Callable[..., AsyncIterator[_T_co]], args: tuple[Any, ...], kwds: dict[str, Any]) -> None: ...
+        gen: AsyncGenerator[_T_co, Any]
+        func: Callable[..., AsyncGenerator[_T_co, Any]]
+        args: tuple[Any, ...]
+        kwds: dict[str, Any]
+        async def __aexit__(
+            self, typ: type[BaseException] | None, value: BaseException | None, traceback: TracebackType | None
+        ) -> bool | None: ...
+
+else:
+    class _AsyncGeneratorContextManager(AbstractAsyncContextManager[_T_co, bool | None]):
         def __init__(self, func: Callable[..., AsyncIterator[_T_co]], args: tuple[Any, ...], kwds: dict[str, Any]) -> None: ...
         gen: AsyncGenerator[_T_co, Any]
         func: Callable[..., AsyncGenerator[_T_co, Any]]
@@ -118,7 +116,7 @@ class closing(AbstractContextManager[_SupportsCloseT, None]):
     def __init__(self, thing: _SupportsCloseT) -> None: ...
     def __exit__(self, *exc_info: Unused) -> None: ...
 
-if True:
+if sys.version_info >= (3, 10):
     class _SupportsAclose(Protocol):
         def aclose(self) -> Awaitable[object]: ...
 
@@ -179,7 +177,7 @@ class AsyncExitStack(Generic[_ExitT_co], metaclass=abc.ABCMeta):
         self, exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: TracebackType | None, /
     ) -> bool: ...
 
-if True:
+if sys.version_info >= (3, 10):
     class nullcontext(AbstractContextManager[_T, None], AbstractAsyncContextManager[_T, None]):
         enter_result: _T
         @overload
@@ -191,7 +189,17 @@ if True:
         async def __aenter__(self) -> _T: ...
         async def __aexit__(self, *exctype: Unused) -> None: ...
 
-if True:
+else:
+    class nullcontext(AbstractContextManager[_T, None]):
+        enter_result: _T
+        @overload
+        def __init__(self: nullcontext[None], enter_result: None = None) -> None: ...
+        @overload
+        def __init__(self: nullcontext[_T], enter_result: _T) -> None: ...  # pyright: ignore[reportInvalidTypeVarUse]  #11780
+        def __enter__(self) -> _T: ...
+        def __exit__(self, *exctype: Unused) -> None: ...
+
+if sys.version_info >= (3, 11):
     _T_fd_or_any_path = TypeVar("_T_fd_or_any_path", bound=FileDescriptorOrPath)
 
     class chdir(AbstractContextManager[None, None], Generic[_T_fd_or_any_path]):
