@@ -21,7 +21,12 @@ setup(
     long_description=open('README.rst').read(),
     author='Alyssa Coghlan',
     author_email='ncoghlan@gmail.com',
-    url='http://contextlib2.readthedocs.org',
+    url='https://github.com/jazzband/contextlib2',
+    project_urls= {
+        'Documentation': 'https://contextlib2.readthedocs.org',
+        'Source': 'https://github.com/jazzband/contextlib2.git',
+        'Issue Tracker': 'https://github.com/jazzband/contextlib2.git',
+    }
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: Apache Software License',
